@@ -1,0 +1,29 @@
+{
+  "name": "itbdw/ip-database",
+  "type": "library",
+  "description": "A Local Ip Database Center",
+  "keywords": [
+    "ip",
+    "database"
+  ],
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "马秉尧"
+    },
+    {
+      "name": "itbdw",
+      "email": "itbudaoweng@gmail.com",
+      "role": "Developer",
+      "homepage": "http://github.com/itbdw"
+    }
+  ],
+  "require": {
+    "php": ">=5.3.3"
+  },
+  "autoload": {
+    "psr-4": {
+      "itbdw\\IpLocation\\": "src/"
+    }
+  }
+}
