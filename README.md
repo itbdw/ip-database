@@ -11,8 +11,13 @@ This is a fairly simple way to get the city info by a IP address.
 
 ##Usage
 composer supported
+```
+composer require itbdw/ip-database
 
-require the class, and run
+```
+
+require the class, and run the code.
+
 
 
 ##Thanks
@@ -20,4 +25,4 @@ require the class, and run
 + 2, class original provider 马秉尧
 
 ##Who am I
-A Coder live in Beijing, China. You can find me on weibo or just email me.
+A Coder live in Beijing, China

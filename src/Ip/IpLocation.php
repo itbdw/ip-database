@@ -13,9 +13,7 @@
  *                          4，增加 get_isp 方法
  *                          5，增加 is_valid_ip 方法
  * 2015-06-11 赵彬言        1，支持composer
- *
  * 此类基于 马秉尧 先生的 1.5 版本，在此感谢。目前您看到的这个文件是由赵彬言维护的。
- *
  * 升级非常方便，安装纯真ip库软件，先对 ip.exe 进行升级，
  * 然后将目录下的 qqwry.dat 文件复制过来覆盖掉旧的文件即可。
  *
@@ -23,7 +21,7 @@
  * @version   2.0
  * @copyright 2005 CoolCode.CN，2012-1015 blog.yungbo.com
  */
-namespace itbdw\IpLocation;
+namespace itbdw\Ip;
 
 /**
  * Class IpLocation
@@ -170,7 +168,7 @@ class IpLocation
 
     /**
      * 如果ip错误，返回 $result['error'] 信息
-     * 示例地点和本人无任何关系
+     * province city county isp remark 对中国以外的ip无法识别
      * <code>
      * $result 是返回的数组
      * $result['ip']            输入的ip
@@ -528,13 +526,9 @@ class IpLocation
      */
     private function is_valid_ip($ip)
     {
-        $preg       = '/^(\d|\d{2}|1\d{2}|2[0-4]\d|25[0-5])\.(\d|\d{2}|1\d{2}|2[0-4]\d|25[0-5])\.(\d|\d{2}|1\d{2}|2[0-4]\d|25[0-5])\.(\d|\d{2}|1\d{2}|2[0-4]\d|25[0-5])$/';
-        $is_matched = false;
-        if (preg_match($preg, $ip, $m)) {
-            $is_matched = true;
-        }
+        $flag = false !== filter_var($ip, FILTER_VALIDATE_IP);
 
-        return $is_matched;
+        return $flag;
     }
 
     /**
