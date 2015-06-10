@@ -1,10 +1,12 @@
 {
   "name": "itbdw/ip-database",
   "type": "library",
-  "description": "A Local Ip Database Center",
+  "description": "A Local Ip Location Database Center, Mainly For Chinese IP",
   "keywords": [
     "ip",
-    "database"
+    "database",
+    "location",
+    "chinese"
   ],
   "license": "MIT",
   "authors": [
