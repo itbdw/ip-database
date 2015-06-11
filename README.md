@@ -16,7 +16,7 @@ composer require 'itbdw/ip-database:1.*'
 
 ```
 
-
+```php
 use itbdw\Ip\IpLocation;
 
 $hostnames = [
@@ -40,7 +40,7 @@ $ipLocation = new IpLocation();
 echo $hostname . "\n";
 
 echo json_encode($ipLocation->getAddr($ip), JSON_UNESCAPED_UNICODE) . "\n";
-
+```
 
 
 ## test case, so cool!
