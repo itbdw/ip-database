@@ -16,7 +16,31 @@ composer require 'itbdw/ip-database:1.*'
 
 ```
 
-require the class, and run the code.
+
+use itbdw\Ip\IpLocation;
+
+$hostnames = [
+    'qq.com',
+    'baidu.com',
+    '360.com',
+    'immomo.com',
+    'github.com',
+    'sina.com.cn',
+    'yungbo.com',
+    'aliyun.com',
+    'google.com',
+
+];
+shuffle($hostnames);
+$hostname = array_pop($hostnames);
+$ip       = gethostbyname($hostname);
+
+$ipLocation = new IpLocation();
+
+echo $hostname . "\n";
+
+echo json_encode($ipLocation->getAddr($ip), JSON_UNESCAPED_UNICODE) . "\n";
+
 
 
 ## test case, so cool!
