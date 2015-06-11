@@ -1,6 +1,7 @@
 <?php
 /**
  * IP 地理位置查询类
+ *
  * @author    马秉尧，赵彬言<itbudaoweng@gmail.com>
  * @version   2.0
  * @copyright 2005 CoolCode.CN，2012-1015 blog.yungbo.com
@@ -119,7 +120,6 @@ class IpLocation
     /**
      * 构造函数，打开 qqwry.dat 文件并初始化类中的信息
      *
-     * @param string $filename
      * @return IpLocation
      */
     public function __construct()
@@ -128,7 +128,8 @@ class IpLocation
 
         if (!file_exists($filename)) {
             trigger_error("Failed open ip database file!");
-            exit;
+
+            return ['error' => 'Failed op ip database'];
         }
         $this->fp = 0;
         if (($this->fp = fopen($filename, 'rb')) !== false) {
@@ -396,7 +397,7 @@ class IpLocation
      * @param string $ip 要转换的 ip 地址
      * @return int    转换完成的数字
      */
-    private function wphp_ip2long($ip)
+    private function ip2long($ip)
     {
         $ip_arr = explode('.', $ip);
         $iplong = (16777216 * intval($ip_arr[0])) + (65536 * intval($ip_arr[1])) + (256 * intval($ip_arr[2])) + intval($ip_arr[3]);
@@ -443,7 +444,7 @@ class IpLocation
     {
         // 将IP地址转化为长整型数，如果在PHP5中，IP地址错误，则返回False，
         // 这时intval将Flase转化为整数-1，之后压缩成big-endian编码的字符串
-        return pack('N', intval($this->wphp_ip2long($ip)));
+        return pack('N', intval($this->ip2long($ip)));
     }
 
     /**
@@ -490,6 +491,10 @@ class IpLocation
         return $area;
     }
 
+    /**
+     * @param $str
+     * @return string
+     */
     private function get_isp($str)
     {
         $ret = '';
@@ -510,7 +515,7 @@ class IpLocation
      */
     private function is_valid_ip($ip)
     {
-        $flag = false !== filter_var($ip, FILTER_VALIDATE_IP);
+        $flag = false !== filter_var($ip, FILTER_VALIDATE_IP, FILTER_FLAG_IPV4);
 
         return $flag;
     }
