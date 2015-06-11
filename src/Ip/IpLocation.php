@@ -4,7 +4,7 @@
  *
  * @author    马秉尧，赵彬言<itbudaoweng@gmail.com>
  * @version   2.0
- * @copyright 2005 CoolCode.CN，2012-1015 blog.yungbo.com
+ * @copyright 2005 CoolCode.CN，2012-2015 blog.yungbo.com
  */
 namespace itbdw\Ip;
 
