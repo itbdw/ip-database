@@ -1,15 +1,9 @@
 # ip-database
 
-## IP-database, runs with PHP.
-This is a fairly simple way to get the city info by a IP address.
-
-## Why choose a local ip-database
-+ Simple To Run. You just need to set up a web server that runs PHP. Simple, right?
-+ Easy To Use. You just need to new the class and get the result. Wow!
-+ Really Fast. The data structure is well designed, you get the result without waiting.
+## PHP IP 地址工具
+只需要 php 环境即可本地解析 ip，不需要网络请求，非常快
 
 ## Usage
-composer supported
 
 ```
 composer require 'itbdw/ip-database'
@@ -67,6 +61,8 @@ case error
 ## update log
 ```
  IP 地理位置查询类
+
+ 2017-09-04 赵彬言      更新 composer 相对路径,bug fix
 
  2015-06-11 赵彬言         1，支持composer 方式引用
                           2，更新 is_valid_ip 实现
