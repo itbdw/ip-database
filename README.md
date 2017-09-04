@@ -10,7 +10,7 @@ composer require 'itbdw/ip-database'
 ```
 
 ```php
-use itbdw\IpLocation;
+use itbdw\Ip\IpLocation;
 
 $hostname = 'itbdw.com';
 $ip       = gethostbyname($hostname);
@@ -22,11 +22,17 @@ echo $hostname . "\n";
 echo json_encode($ipLocation->getAddr($ip), JSON_UNESCAPED_UNICODE) . "\n";
 ```
 
+## 数据库文件更新
+
+由于我目前没有 Windows 电脑，所以IP文件已经很久没有更新了。
+
+http://www.cz88.net/fox/ipdat.shtml
+下载数据库程序（Windows 环境），执行完毕后，将 QQWry.dat 文件重命名为 qqwry.dat 放到对应目录即可
 
 ## test case, so cool!
 
 ```
-➜  ip-database git:(develop) php tests/ip.php
+➜  php tests/ip.php
 qq.com
 ```
 case ok
@@ -54,7 +60,7 @@ case error
 ```
 
 ##Thanks
-+ 1, qqary.dat database provider www.cz88.net
++ 1, qqary.dat database provider http://www.cz88.net/fox/ipdat.shtml
 + 2, class original provider 马秉尧
 
 
@@ -80,12 +86,15 @@ case error
                           4，增加 get_isp 方法
                           5，增加 is_valid_ip 方法
 
-
- 此类基于 马秉尧 先生的 1.5 版本，在此感谢。目前您看到的这个文件是由赵彬言维护的。
-
- 升级ip数据库非常方便，如果用的composer方式安装的，直接composer update 即可
-
- 如果你想自己升级，可以安装纯真ip库软件，先对 ip.exe 进行升级
- 然后将目录下的 qqwry.dat 文件复制过来覆盖掉旧的文件即可。
 ```
+
+## 其它 IP 数据库推荐
+
+国内的
+
+http://www.ipip.net/index.html
+
+国际的
+http://lite.ip2location.com/
+
 
