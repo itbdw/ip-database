@@ -10,28 +10,15 @@ This is a fairly simple way to get the city info by a IP address.
 
 ## Usage
 composer supported
-```
-composer require 'itbdw/ip-database:1.*'
 
+```
+composer require 'itbdw/ip-database'
 ```
 
 ```php
 use itbdw\Ip\IpLocation;
 
-$hostnames = [
-    'qq.com',
-    'baidu.com',
-    '360.com',
-    'immomo.com',
-    'github.com',
-    'sina.com.cn',
-    'yungbo.com',
-    'aliyun.com',
-    'google.com',
-
-];
-shuffle($hostnames);
-$hostname = array_pop($hostnames);
+$hostname = 'itbdw.com';
 $ip       = gethostbyname($hostname);
 
 $ipLocation = new IpLocation();
@@ -105,5 +92,4 @@ case error
  如果你想自己升级，可以安装纯真ip库软件，先对 ip.exe 进行升级
  然后将目录下的 qqwry.dat 文件复制过来覆盖掉旧的文件即可。
 ```
-##Who am I
-A Coder live in Beijing, China
+
