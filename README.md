@@ -16,7 +16,7 @@ composer require 'itbdw/ip-database'
 ```
 
 ```php
-use itbdw\Ip\IpLocation;
+use itbdw\IpLocation;
 
 $hostname = 'itbdw.com';
 $ip       = gethostbyname($hostname);

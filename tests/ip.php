@@ -5,7 +5,7 @@
  */
 
 //you do not need to do this if use composer!
-require dirname(__DIR__) . '/src/Ip/IpLocation.php';
+require dirname(__DIR__) . '/src/IpLocation.php';
 
 use itbdw\Ip\IpLocation;
 
