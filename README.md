@@ -93,6 +93,7 @@ case error
 http://www.ipip.net/index.html
 
 国际的
-http://lite.ip2location.com/
+
+https://dev.maxmind.com/zh-hans/geoip/geoip2/geolite2-%E5%BC%80%E6%BA%90%E6%95%B0%E6%8D%AE%E5%BA%93/
 
 
