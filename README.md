@@ -15,11 +15,9 @@ use itbdw\Ip\IpLocation;
 $hostname = 'itbdw.com';
 $ip       = gethostbyname($hostname);
 
-$ipLocation = new IpLocation();
-
 echo $hostname . "\n";
 
-echo json_encode($ipLocation->getAddr($ip), JSON_UNESCAPED_UNICODE) . "\n";
+echo json_encode(IpLocation::getLocation($ip), JSON_UNESCAPED_UNICODE) . "\n";
 ```
 
 ## 数据库文件更新
@@ -36,24 +34,20 @@ http://www.cz88.net/fox/ipdat.shtml
 qq.com
 ```
 case ok
-```javascript
+```json
 {
   "ip": "163.177.65.160",
-  "beginip": "163.177.65.0",
-  "endip": "163.177.65.255",
   "country": "中国",
   "province": "广东省",
   "city": "深圳市",
   "county": "",
   "isp": "联通",
-  "remark": "广东省深圳市",
-  "smallarea": "腾讯计算机系统联通节点",
   "area": "中国广东省深圳市腾讯计算机系统联通节点"
 }
 ```
 
 case error
-```javascript
+```json
 {
   "error": "ip invalid"
 }
@@ -67,8 +61,12 @@ case error
 ## update log
 ```
  IP 地理位置查询类
+ 
+ 2017-09-12 赵彬言         1，缩减返回数据，去掉字段 remark smallarea baginip endip
+                          2，将调用改为单例模式，保证只读取一次文件
+                          3，修复 bug，直接将返回 gbk 编码内容转为 utf-8，移除编码隐患
 
- 2017-09-04 赵彬言      更新 composer 相对路径,bug fix
+ 2017-09-04 赵彬言         1，更新 composer 相对路径,bug fix
 
  2015-06-11 赵彬言         1，支持composer 方式引用
                           2，更新 is_valid_ip 实现

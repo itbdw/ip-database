@@ -25,9 +25,7 @@ shuffle($hostnames);
 $hostname = array_pop($hostnames);
 $ip       = gethostbyname($hostname);
 
-$ipLocation = new IpLocation();
-
 echo $hostname . "\n";
 
-echo json_encode($ipLocation->getAddr($ip), JSON_UNESCAPED_UNICODE) . "\n";
+echo json_encode(IpLocation::getLocation($ip), JSON_UNESCAPED_UNICODE) . "\n";
 
