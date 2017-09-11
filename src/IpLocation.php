@@ -9,12 +9,17 @@
 namespace itbdw\Ip;
 
 /**
+ *
+ * 输出编码为 UTF-8
+ *
  * Class IpLocation
  *
  * @package itbdw\IpLocation
  */
 class IpLocation
 {
+    private static $instance;
+
     /**
      * qqwry.dat文件指针
      *
@@ -44,43 +49,35 @@ class IpLocation
     private $totalip;
 
     /**
-     * 输出的字符编码
-     * 默认是 UTF-8
-     *
-     * @var string
-     */
-    private $out_charset = 'UTF-8';
-
-    /**
      * 运营商词典
      *
      * @var array
      */
-    private $dict_isp = array(
+    private $dict_isp = [
         '联通',
         '移动',
         '铁通',
         '电信',
-    );
+    ];
 
     /**
      * 中国直辖市
      *
      * @var array
      */
-    private $dict_city_directly = array(
+    private $dict_city_directly = [
         '北京',
         '天津',
         '重庆',
         '上海',
-    );
+    ];
 
     /**
      * 中国省份
      *
      * @var array
      */
-    private $dict_province = array(
+    private $dict_province = [
         '北京',
         '天津',
         '重庆',
@@ -115,104 +112,127 @@ class IpLocation
         '西藏',
         '香港',
         '澳门',
-    );
+    ];
 
     /**
      * 构造函数，打开 qqwry.dat 文件并初始化类中的信息
      *
      * @return IpLocation
      */
-    public function __construct()
+    private final function __construct()
+    {
+        $this->init();
+    }
+
+    private function init()
     {
         $filename = __DIR__ . '/qqwry.dat';
 
         if (!file_exists($filename)) {
             trigger_error("Failed open ip database file!");
-
-            return ['error' => 'Failed op ip database'];
+            return;
         }
+
         $this->fp = 0;
         if (($this->fp = fopen($filename, 'rb')) !== false) {
             $this->firstip = $this->getlong();
-            $this->lastip  = $this->getlong();
+            $this->lastip = $this->getlong();
             $this->totalip = ($this->lastip - $this->firstip) / 7;
-        }
-
-        foreach ($this->dict_isp as $key => $value) {
-            $this->dict_isp[$key] = iconv('UTF-8', 'GBK', $value);
-        }
-
-        foreach ($this->dict_city_directly as $key => $value) {
-            $this->dict_city_directly[$key] = iconv('UTF-8', 'GBK', $value);
-        }
-
-        foreach ($this->dict_province as $key => $value) {
-            $this->dict_province[$key] = iconv('UTF-8', 'GBK', $value);
         }
     }
 
     /**
+     * 返回读取的长整型数
+     *
+     * @access private
+     * @return int
+     */
+    private function getlong()
+    {
+        //将读取的little-endian编码的4个字节转化为长整型数
+        $result = unpack('Vlong', fread($this->fp, 4));
+
+        return $result['long'];
+    }
+
+    /**
+     * @param $ip
+     * @return array
+     */
+    public static function getLocation($ip)
+    {
+        if (self::$instance === null) {
+            self::$instance = new self();
+        }
+
+        return self::$instance->getAddr($ip);
+    }
+
+    /**
      * 如果ip错误，返回 $result['error'] 信息
-     * province city county isp remark 对中国以外的ip无法识别
+     * province city county isp 对中国以外的ip无法识别
      * <code>
      * $result 是返回的数组
      * $result['ip']            输入的ip
-     * $result['beginip']       起始段
-     * $result['endip']         结束段
      * $result['country']       国家 如 中国
      * $result['province']      省份信息 如 河北省
      * $result['city']          市区 如 邢台市
      * $result['county']        郡县 如 威县
      * $result['isp']           运营商 如 联通
-     * $result['remark']        市区县信息 如 河北省邢台市威县
-     * $result['smallarea']     小区信息 如 新科网吧(北外街)
      * $result['area']          最完整的信息 如 中国河北省邢台市威县新科网吧(北外街)
      * </code>
      *
      * @param $ip
      * @return array
      */
-    public function getAddr($ip)
+    private function getAddr($ip)
     {
-        $result    = array();
-        $is_china  = false;
-        $gbk_sheng = iconv('UTF-8', 'GBK', '省');
-        $gbk_shi   = iconv('UTF-8', 'GBK', '市');
-        $gbk_xian  = iconv('UTF-8', 'GBK', '县');
-        $gbk_qu    = iconv('UTF-8', 'GBK', '区');
+        $result = [];
+        $is_china = false;
+        $seperator_sheng = '省';
+        $seperator_shi = '市';
+        $seperator_xian = '县';
+        $seperator_qu = '区';
 
-        if (!$this->is_valid_ip($ip)) {
+        if (!$this->isValidIpV4($ip)) {
             $result['error'] = 'ip invalid';
+            return $result;
         } else {
-            $location = $this->getlocation($ip); // $location[country] [area]
+            $location = $this->getlocationfromip($ip); // $location[country] [area]
+            if (!$location) {
+                $result['error'] = 'file open failed';
+                return $result;
+            }
 
-            $location['remark']    = $location['country']; //北京市朝阳区
-            $location['smallarea'] = $location['area']; // 金桥国际小区
-            $location['province']  = $location['city'] = $location['county'] = '';
+            $location['org_country'] = $location['country']; //北京市朝阳区
 
-            $_tmp_province = explode($gbk_sheng, $location['country']);
+            $location['org_area'] = $location['area']; // 金桥国际小区
+
+            $location['province'] = $location['city'] = $location['county'] = '';
+
+            $_tmp_province = explode($seperator_sheng, $location['country']);
             //存在 省 标志 xxx省yyyy 中的yyyy
             if (isset($_tmp_province[1])) {
                 $is_china = true;
                 //省
-                $location['province'] = $_tmp_province[0] . $gbk_sheng; //河北省
+                $location['province'] = $_tmp_province[0]; //河北
 
-                if (strpos($_tmp_province[1], $gbk_shi) !== false) {
-                    $_tmp_city = explode($gbk_shi, $_tmp_province[1]);
+                if (strpos($_tmp_province[1], $seperator_shi) !== false) {
+                    $_tmp_city = explode($seperator_shi, $_tmp_province[1]);
                     //市
-                    $location['city'] = $_tmp_city[0] . $gbk_shi;
+                    $location['city'] = $_tmp_city[0] . $seperator_shi;
 
                     //县
                     if (isset($_tmp_city[1])) {
-                        if (strpos($_tmp_city[1], $gbk_xian) !== false) {
-                            $_tmp_county        = explode($gbk_xian, $_tmp_city[1]);
-                            $location['county'] = $_tmp_county[0] . $gbk_xian;
+                        if (strpos($_tmp_city[1], $seperator_xian) !== false) {
+                            $_tmp_county = explode($seperator_xian, $_tmp_city[1]);
+                            $location['county'] = $_tmp_county[0] . $seperator_xian;
                         }
 
                         //区
-                        if (!$location['county'] && strpos($_tmp_city[1], $gbk_qu) !== false) {
-                            $_tmp_qu            = explode($gbk_qu, $_tmp_city[1]);
-                            $location['county'] = $_tmp_qu[0] . $gbk_qu;
+                        if (!$location['county'] && strpos($_tmp_city[1], $seperator_qu) !== false) {
+                            $_tmp_qu = explode($seperator_qu, $_tmp_city[1]);
+                            $location['county'] = $_tmp_qu[0] . $seperator_qu;
                         }
                     }
                 }
@@ -221,48 +241,47 @@ class IpLocation
                 //处理内蒙古不带省份类型的和直辖市
                 foreach ($this->dict_province as $key => $value) {
 
-                    if (false !== strpos($location['country'], $this->dict_province[$key])) {
+                    if (false !== strpos($location['country'], $value)) {
                         $is_china = true;
                         //直辖市
                         if (in_array($value, $this->dict_city_directly)) {
-                            $_tmp_province = explode($gbk_shi, $location['country']);
+                            $_tmp_province = explode($seperator_shi, $location['country']);
                             //直辖市
-                            $location['province'] = $_tmp_province[0] . $gbk_shi;
+                            $location['province'] = $_tmp_province[0];
 
                             //市辖区
                             if (isset($_tmp_province[1])) {
-                                if (strpos($_tmp_province[1], $gbk_qu) !== false) {
-                                    $_tmp_qu          = explode($gbk_qu, $_tmp_province[1]);
-                                    $location['city'] = $_tmp_qu[0] . $gbk_qu;
+                                if (strpos($_tmp_province[1], $seperator_qu) !== false) {
+                                    $_tmp_qu = explode($seperator_qu, $_tmp_province[1]);
+                                    $location['city'] = $_tmp_qu[0] . $seperator_qu;
                                 }
                             }
                         } else {
                             //省
-                            $location['province'] = $this->dict_province[$key];
-                            $_tmp_city            = $location['country'];
+                            $location['province'] = $value;
 
                             //没有省份标志 只能替换
-                            $_tmp_city = str_replace($location['province'], '', $_tmp_city);
-                            $_tmp_city = ltrim($_tmp_city, $gbk_shi); //防止直辖市捣乱 上海市xxx区 =》 市xx区
+                            $_tmp_city = str_replace($location['province'], '', $location['country']);
+                            $_tmp_city = ltrim($_tmp_city, $seperator_shi); //防止直辖市捣乱 上海市xxx区 =》 市xx区
 
                             //内蒙古 类型的 获取市县信息
-                            if (strpos($_tmp_city, $gbk_shi) !== false) {
+                            if (strpos($_tmp_city, $seperator_shi) !== false) {
                                 //市
-                                $_tmp_city = explode($gbk_shi, $_tmp_city);
+                                $_tmp_city = explode($seperator_shi, $_tmp_city);
 
-                                $location['city'] = $_tmp_city[0] . $gbk_shi;
+                                $location['city'] = $_tmp_city[0] . $seperator_shi;
 
                                 //县
                                 if (isset($_tmp_city[1])) {
-                                    if (strpos($_tmp_city[1], $gbk_xian) !== false) {
-                                        $_tmp_county        = explode($gbk_xian, $_tmp_city[1]);
-                                        $location['county'] = $_tmp_county[0] . $gbk_xian;
+                                    if (strpos($_tmp_city[1], $seperator_xian) !== false) {
+                                        $_tmp_county = explode($seperator_xian, $_tmp_city[1]);
+                                        $location['county'] = $_tmp_county[0] . $seperator_xian;
                                     }
 
                                     //区
-                                    if (!$location['county'] && strpos($_tmp_city[1], $gbk_qu) !== false) {
-                                        $_tmp_qu            = explode($gbk_qu, $_tmp_city[1]);
-                                        $location['county'] = $_tmp_qu[0] . $gbk_qu;
+                                    if (!$location['county'] && strpos($_tmp_city[1], $seperator_qu) !== false) {
+                                        $_tmp_qu = explode($seperator_qu, $_tmp_city[1]);
+                                        $location['county'] = $_tmp_qu[0] . $seperator_qu;
                                     }
                                 }
                             }
@@ -275,30 +294,40 @@ class IpLocation
             }
 
             if ($is_china) {
-                $location['country'] = iconv('UTF-8', 'GBK', '中国');
+                $location['country'] = '中国';
             }
 
-            $location['isp']     = $this->get_isp($location['area']);
-            $result['ip']        = $location['ip'];
-            $result['beginip']   = $location['beginip'];
-            $result['endip']     = $location['endip'];
-            $result['country']   = $location['country'];
-            $result['province']  = $location['province'];
-            $result['city']      = $location['city'];
-            $result['county']    = $location['county'];
-            $result['isp']       = $location['isp'];
-            $result['remark']    = $location['remark'];
-            $result['smallarea'] = $location['smallarea'];
-            $result['area']      = $location['country'] . $location['province'] . $location['city'] . $location['county'] . $location['smallarea'];
+            $location['isp'] = $this->getIsp($location['area']);
 
-            if ('GBK' != strtoupper($this->out_charset)) {
-                foreach ($result as $key => $value) {
-                    $result[$key] = iconv('GBK', $this->out_charset, $value);
-                }
-            }
+            $result['ip'] = $location['ip'];
+
+//            $result['beginip']   = $location['beginip'];
+//            $result['endip']     = $location['endip'];
+
+//            $result['org_country']    = $location['org_country'];  //纯真数据库返回的列1
+//            $result['org_area'] = $location['org_area'];
+
+            $result['country'] = $location['country'];
+            $result['province'] = $location['province'];
+            $result['city'] = $location['city'];
+            $result['county'] = $location['county'];
+            $result['isp'] = $location['isp'];
+
+            $result['area'] = $location['country'] . $location['province'] . $location['city'] . $location['county'] . $location['org_area'];
         }
 
         return $result; //array
+    }
+
+    /**
+     * @param $ip
+     * @return bool
+     */
+    private function isValidIpV4($ip)
+    {
+        $flag = false !== filter_var($ip, FILTER_VALIDATE_IP, FILTER_FLAG_IPV4);
+
+        return $flag;
     }
 
     /**
@@ -308,7 +337,7 @@ class IpLocation
      * @param string $ip
      * @return array
      */
-    private function getlocation($ip)
+    private function getlocationfromip($ip)
     {
         if (!$this->fp) {
             return null;
@@ -319,8 +348,8 @@ class IpLocation
         $ip = $this->packip($location['ip']); // 将输入的IP地址转化为可比较的IP地址
         // 不合法的IP地址会被转化为255.255.255.255
         // 对分搜索
-        $l      = 0; // 搜索的下边界
-        $u      = $this->totalip; // 搜索的上边界
+        $l = 0; // 搜索的下边界
+        $u = $this->totalip; // 搜索的上边界
         $findip = $this->lastip; // 如果没有找到就返回最后一条IP记录（qqwry.dat的版本信息）
         while ($l <= $u) { // 当上边界小于下边界时，查找失败
             $i = floor(($l + $u) / 2); // 计算近似中间记录
@@ -345,10 +374,10 @@ class IpLocation
         //获取查找到的IP地理位置信息
         fseek($this->fp, $findip);
         $location['beginip'] = long2ip($this->getlong()); // 用户IP所在范围的开始地址
-        $offset              = $this->getlong3();
+        $offset = $this->getlong3();
         fseek($this->fp, $offset);
         $location['endip'] = long2ip($this->getlong()); // 用户IP所在范围的结束地址
-        $byte              = fread($this->fp, 1); // 标志字节
+        $byte = fread($this->fp, 1); // 标志字节
         switch (ord($byte)) {
             case 1: // 标志字节为1，表示国家和区域信息都被同时重定向
                 $countryOffset = $this->getlong3(); // 重定向地址
@@ -363,7 +392,7 @@ class IpLocation
                         break;
                     default: // 否则，表示国家信息没有被重定向
                         $location['country'] = $this->getstring($byte);
-                        $location['area']    = $this->getarea();
+                        $location['area'] = $this->getarea();
                         break;
                 }
                 break;
@@ -375,18 +404,35 @@ class IpLocation
                 break;
             default: // 否则，表示国家信息没有被重定向
                 $location['country'] = $this->getstring($byte);
-                $location['area']    = $this->getarea();
+                $location['area'] = $this->getarea();
                 break;
         }
 
-        if ($location['country'] == iconv('UTF-8', 'GBK', " CZ88.NET") or $location['country'] == iconv('UTF-8', 'GBK', "纯真网络")) { // CZ88.NET表示没有有效信息
-            $location['country'] = "";
+        $location['country'] = iconv("GBK", "UTF-8", $location['country']);
+        $location['area'] = iconv("GBK", "UTF-8", $location['area']);
+
+        if ($location['country'] == " CZ88.NET" || $location['country'] == "纯真网络") { // CZ88.NET表示没有有效信息
+            $location['country'] = "无数据";
         }
-        if ($location['area'] == iconv('UTF-8', 'GBK', " CZ88.NET")) {
+        if ($location['area'] == " CZ88.NET") {
             $location['area'] = "";
         }
 
         return $location;
+    }
+
+    /**
+     * 返回压缩后可进行比较的IP地址
+     *
+     * @access private
+     * @param string $ip
+     * @return string
+     */
+    private function packip($ip)
+    {
+        // 将IP地址转化为长整型数，如果在PHP5中，IP地址错误，则返回False，
+        // 这时intval将Flase转化为整数-1，之后压缩成big-endian编码的字符串
+        return pack('N', intval($this->ip2long($ip)));
     }
 
     /**
@@ -406,20 +452,6 @@ class IpLocation
     }
 
     /**
-     * 返回读取的长整型数
-     *
-     * @access private
-     * @return int
-     */
-    private function getlong()
-    {
-        //将读取的little-endian编码的4个字节转化为长整型数
-        $result = unpack('Vlong', fread($this->fp, 4));
-
-        return $result['long'];
-    }
-
-    /**
      * 返回读取的3个字节的长整型数
      *
      * @access private
@@ -431,20 +463,6 @@ class IpLocation
         $result = unpack('Vlong', fread($this->fp, 3) . chr(0));
 
         return $result['long'];
-    }
-
-    /**
-     * 返回压缩后可进行比较的IP地址
-     *
-     * @access private
-     * @param string $ip
-     * @return string
-     */
-    private function packip($ip)
-    {
-        // 将IP地址转化为长整型数，如果在PHP5中，IP地址错误，则返回False，
-        // 这时intval将Flase转化为整数-1，之后压缩成big-endian编码的字符串
-        return pack('N', intval($this->ip2long($ip)));
     }
 
     /**
@@ -495,7 +513,7 @@ class IpLocation
      * @param $str
      * @return string
      */
-    private function get_isp($str)
+    private function getIsp($str)
     {
         $ret = '';
 
@@ -507,17 +525,6 @@ class IpLocation
         }
 
         return $ret;
-    }
-
-    /**
-     * @param $ip
-     * @return bool
-     */
-    private function is_valid_ip($ip)
-    {
-        $flag = false !== filter_var($ip, FILTER_VALIDATE_IP, FILTER_FLAG_IPV4);
-
-        return $flag;
     }
 
     /**
