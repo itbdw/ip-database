@@ -1,15 +1,30 @@
-# ip-database
+# 免费IP数据库 (纯真IP库，已经格式为国家、省、市、县、运营商)
 
-## PHP IP 地址工具
-只需要 php 环境即可本地解析 ip，不需要网络请求，非常快
+此工具基于纯真 IP 库，并且把非结构化的数据结构化。
 
-## Usage
+一旦识别了 IP，都可以显示国家。国内 ip 都能识别出省，基本可以识别出市、运营商，有部分能识别出县，以及公司小区学校网吧等信息。
+
+## 环境要求
+
+只需要 php 环境即可本地解析 ip。
+不需要网络请求。
+第一次查询即读入内存，以后直接从内存读取，效率非常高。
+
+## 数据库文件更新日期
+
+2017年9月12日
+
+## 使用说明
 
 ```
 composer require 'itbdw/ip-database'
 ```
 
 ```php
+
+//根据实际情况，基本上用框架（如 Laravel）的话不需要手动引入
+//require 'vender/autoload.php';
+
 use itbdw\Ip\IpLocation;
 
 $hostname = 'itbdw.com';
@@ -20,25 +35,18 @@ echo $hostname . "\n";
 echo json_encode(IpLocation::getLocation($ip), JSON_UNESCAPED_UNICODE) . "\n";
 ```
 
-## 数据库文件更新
-
-由于我目前没有 Windows 电脑，所以IP文件已经很久没有更新了。
-
-http://www.cz88.net/fox/ipdat.shtml
-下载数据库程序（Windows 环境），执行完毕后，将 QQWry.dat 文件重命名为 qqwry.dat 放到对应目录即可
-
-## test case, so cool!
+## 测试合法性
 
 ```
 ➜  php tests/ip.php
 qq.com
 ```
-case ok
+正确数据
 ```json
 {
   "ip": "163.177.65.160",
   "country": "中国",
-  "province": "广东省",
+  "province": "广东",
   "city": "深圳市",
   "county": "",
   "isp": "联通",
@@ -46,12 +54,19 @@ case ok
 }
 ```
 
-case error
+异常情况
 ```json
 {
   "error": "ip invalid"
 }
 ```
+
+## 自己手动更新数据库
+
+http://www.cz88.net/fox/ipdat.shtml
+下载数据库程序（Windows 环境），执行完毕后，把 qqwry.dat 复制到 src 目录，覆盖掉原文件即可
+
+
 
 ##Thanks
 + 1, qqary.dat database provider http://www.cz88.net/fox/ipdat.shtml
@@ -65,6 +80,7 @@ case error
  2017-09-12 赵彬言         1，缩减返回数据，去掉字段 remark smallarea baginip endip
                           2，将调用改为单例模式，保证只读取一次文件
                           3，修复 bug，直接将返回 gbk 编码内容转为 utf-8，移除编码隐患
+                          4，去掉了"省"标志，变成了如 中国 浙江 杭州市 这样的数据
 
  2017-09-04 赵彬言         1，更新 composer 相对路径,bug fix
 
