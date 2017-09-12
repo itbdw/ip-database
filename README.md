@@ -23,7 +23,7 @@ composer require 'itbdw/ip-database'
 ```php
 
 //根据实际情况，基本上用框架（如 Laravel）的话不需要手动引入
-//require 'vender/autoload.php';
+//require 'vendor/autoload.php';
 
 use itbdw\Ip\IpLocation;
 
@@ -77,7 +77,7 @@ http://www.cz88.net/fox/ipdat.shtml
 ```
  IP 地理位置查询类
  
- 2017-09-12 赵彬言         1，缩减返回数据，去掉字段 remark smallarea baginip endip
+ 2017-09-12 赵彬言         1，缩减返回数据，去掉字段 remark smallarea beginip endip
                           2，将调用改为单例模式，保证只读取一次文件
                           3，修复 bug，直接将返回 gbk 编码内容转为 utf-8，移除编码隐患
                           4，去掉了"省"标志，变成了如 中国 浙江 杭州市 这样的数据
