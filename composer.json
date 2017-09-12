@@ -1,7 +1,7 @@
 {
   "name": "itbdw/ip-database",
   "type": "library",
-  "description": "免费IP数据库（解析为国家、省、市、县、运营商）",
+  "description": "IP位置数据库（解析为国家、省、市、县、运营商）",
   "keywords": [
     "ip",
     "database",
@@ -9,7 +9,9 @@
     "chinese",
     "china",
     "数据库",
-    "纯真"
+    "纯真",
+    "位置",
+    "地区"
   ],
   "license": "MIT",
   "authors": [
