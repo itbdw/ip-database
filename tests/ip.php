@@ -10,12 +10,10 @@ require dirname(__DIR__) . '/src/IpLocation.php';
 use itbdw\Ip\IpLocation;
 
 $hostnames = [
-    'baidu.com',
-    'immomo.com',
-    'github.com',
     'aliyun.com',
     'google.com',
-    'weibo.com'
+    'weibo.com',
+    'invalidip',
 ];
 shuffle($hostnames);
 $hostname = array_pop($hostnames);
