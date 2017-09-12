@@ -27,21 +27,21 @@ composer require 'itbdw/ip-database'
 
 use itbdw\Ip\IpLocation;
 
-$hostname = 'itbdw.com';
-$ip       = gethostbyname($hostname);
-
-echo $hostname . "\n";
-
+$ip = '140.205.172.5'; //阿里云官网 ip
 echo json_encode(IpLocation::getLocation($ip), JSON_UNESCAPED_UNICODE) . "\n";
+//{"ip":"140.205.172.5","country":"中国","province":"浙江","city":"杭州市","county":"","isp":"","area":"中国浙江杭州市阿里巴巴网络有限公司BGP数据中心"}
+
+$ip = '172.217.27.142';//Google Ip
+echo json_encode(IpLocation::getLocation($ip), JSON_UNESCAPED_UNICODE) . "\n";
+//{"ip":"172.217.27.142","country":"美国","province":"","city":"","county":"","isp":"","area":"美国加利福尼亚州圣克拉拉县山景市谷歌公司"}
+
+
+
 ```
 
-## 测试合法性
+## 响应
 
-```
-➜  php tests/ip.php
-qq.com
-```
-正确数据
+获取成功
 ```json
 {
   "ip": "163.177.65.160",
@@ -54,7 +54,7 @@ qq.com
 }
 ```
 
-异常情况
+异常
 ```json
 {
   "error": "ip invalid"
