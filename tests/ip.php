@@ -1,6 +1,6 @@
 <?php
 /**
- * @author Zhao Binyan <zhao.binyan@immomo.com>
+ * @author Zhao Binyan <itbudaoweng@gmail.com>
  * @since  2015-06-11
  */
 
@@ -10,19 +10,16 @@ require dirname(__DIR__) . '/src/IpLocation.php';
 use itbdw\Ip\IpLocation;
 
 $hostnames = [
-    'qq.com',
     'baidu.com',
-    '360.com',
     'immomo.com',
     'github.com',
-    'sina.com.cn',
-    'yungbo.com',
     'aliyun.com',
     'google.com',
-
+    'weibo.com'
 ];
 shuffle($hostnames);
 $hostname = array_pop($hostnames);
+
 $ip       = gethostbyname($hostname);
 
 echo $hostname . "\n";
