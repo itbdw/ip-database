@@ -12,7 +12,7 @@
 
 ## 数据库文件更新日期
 
-2017年9月12日
+2018年2月21日
 
 ## 使用说明
 
@@ -27,16 +27,16 @@ composer require 'itbdw/ip-database'
 
 use itbdw\Ip\IpLocation;
 
-$ip = '140.205.172.5'; //阿里云官网 ip
+//支持自定义文件路径
+$qqwry_filepath = '/abspath/qqwry.dat';
+echo json_encode(IpLocation::getLocation($ip, $qqwry_filepath), JSON_UNESCAPED_UNICODE) . "\n";
 echo json_encode(IpLocation::getLocation($ip), JSON_UNESCAPED_UNICODE) . "\n";
+
+$ip = '140.205.172.5'; //阿里云官网 ip
 //{"ip":"140.205.172.5","country":"中国","province":"浙江","city":"杭州市","county":"","isp":"","area":"中国浙江杭州市阿里巴巴网络有限公司BGP数据中心"}
 
 $ip = '172.217.27.142';//Google Ip
-echo json_encode(IpLocation::getLocation($ip), JSON_UNESCAPED_UNICODE) . "\n";
 //{"ip":"172.217.27.142","country":"美国","province":"","city":"","county":"","isp":"","area":"美国加利福尼亚州圣克拉拉县山景市谷歌公司"}
-
-
-
 ```
 
 ## 响应
@@ -63,10 +63,11 @@ echo json_encode(IpLocation::getLocation($ip), JSON_UNESCAPED_UNICODE) . "\n";
 
 ## 自己手动更新数据库
 
-http://www.cz88.net/fox/ipdat.shtml
+1，http://www.cz88.net/fox/ipdat.shtml
 下载数据库程序（Windows 环境），执行完毕后，把 qqwry.dat 复制到 src 目录，覆盖掉原文件即可
 
-
+2，进一步，可以定期把上述文件同步到服务器特定路径，调用时动态传入真实 qqwry.dat 的绝对路径，
+而不是替换代码文件
 
 ## Thanks
 

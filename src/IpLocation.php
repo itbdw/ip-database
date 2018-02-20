@@ -121,14 +121,17 @@ class IpLocation
      *
      * @return IpLocation
      */
-    private final function __construct()
+    private final function __construct($filepath = null)
     {
-        $this->init();
+        $this->init($filepath);
     }
 
-    private function init()
+    private function init($filepath)
     {
         $filename = __DIR__ . '/qqwry.dat';
+	if ($filepath) {
+            $filename = $filepath;
+        }
 
         if (!file_exists($filename)) {
             trigger_error("Failed open ip database file!");
@@ -161,10 +164,10 @@ class IpLocation
      * @param $ip
      * @return array
      */
-    public static function getLocation($ip)
+    public static function getLocation($ip, $filepath = null)
     {
         if (self::$instance === null) {
-            self::$instance = new self();
+            self::$instance = new self($filepath);
         }
 
         return self::$instance->getAddr($ip);
