@@ -267,7 +267,12 @@ class IpLocation
 
                             //没有省份标志 只能替换
                             $_tmp_city = str_replace($location['province'], '', $location['country']);
-                            $_tmp_city = ltrim($_tmp_city, $seperator_shi); //防止直辖市捣乱 上海市xxx区 =》 市xx区
+
+				//防止直辖市捣乱 上海市xxx区 =》 市xx区
+			    $_tmp_shi_pos = mb_stripos($_tmp_city, $seperator_shi);
+			    if ($_tmp_shi_pos === 0) {
+				$_tmp_city = mb_substr($_tmp_city, 1);	
+			    }
 
                             //内蒙古 类型的 获取市县信息
                             if (strpos($_tmp_city, $seperator_shi) !== false) {
