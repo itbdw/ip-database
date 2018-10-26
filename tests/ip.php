@@ -9,20 +9,18 @@ require dirname(__DIR__) . '/src/IpLocation.php';
 
 use itbdw\Ip\IpLocation;
 
-$hostnames = [
-    'google.com',
-    'weibo.com',
-    'nothing',
+$ips = [
+    "172.217.25.14",//美国
+    "140.205.172.5",//杭州
+    "123.125.115.110",//北京
+    "221.196.0.0",//
+    "60.195.153.98",
 ];
-shuffle($hostnames);
-$hostname = array_pop($hostnames);
 
-$ip       = gethostbyname($hostname);
+foreach ($ips as $ip) {
 
-echo $hostname . "\n";
+    echo json_encode(IpLocation::getLocation($ip), JSON_UNESCAPED_UNICODE) . "\n";
 
-$qqwry_path = dirname(__DIR__) . '/src/qqwry.dat';
+}
 
-echo json_encode(IpLocation::getLocation($ip), JSON_UNESCAPED_UNICODE) . "\n";
-echo json_encode(IpLocation::getLocation($ip, $qqwry_path), JSON_UNESCAPED_UNICODE) . "\n";
 
