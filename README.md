@@ -32,11 +32,6 @@ $qqwry_filepath = '/abspath/qqwry.dat';
 echo json_encode(IpLocation::getLocation($ip, $qqwry_filepath), JSON_UNESCAPED_UNICODE) . "\n";
 echo json_encode(IpLocation::getLocation($ip), JSON_UNESCAPED_UNICODE) . "\n";
 
-$ip = '140.205.172.5'; //阿里云官网 ip
-//{"ip":"140.205.172.5","country":"中国","province":"浙江","city":"杭州市","county":"","isp":"","area":"中国浙江杭州市阿里巴巴网络有限公司BGP数据中心"}
-
-$ip = '172.217.27.142';//Google Ip
-//{"ip":"172.217.27.142","country":"美国","province":"","city":"","county":"","isp":"","area":"美国加利福尼亚州圣克拉拉县山景市谷歌公司"}
 ```
 
 ## 响应
@@ -59,6 +54,15 @@ $ip = '172.217.27.142';//Google Ip
 {
   "error": "ip invalid"
 }
+```
+
+## 典型返回
+```
+{"ip":"172.217.25.14","country":"美国","province":"","city":"","county":"","isp":"","area":"美国加利福尼亚州圣克拉拉县山景市谷歌公司"}
+{"ip":"140.205.172.5","country":"中国","province":"浙江","city":"杭州市","county":"","isp":"","area":"中国浙江杭州市阿里巴巴网络有限公司BGP数据中心"}
+{"ip":"123.125.115.110","country":"中国","province":"北京","city":"","county":"","isp":"联通","area":"中国北京北京百度网讯科技有限公司联通节点(BGP)"}
+{"ip":"221.196.0.0","country":"中国","province":"天津","city":"河北区","county":"","isp":"联通","area":"中国天津河北区联通"}
+{"ip":"60.195.153.98","country":"中国","province":"北京","city":"顺义区","county":"","isp":"","area":"中国北京顺义区后沙峪金龙网吧"}
 ```
 
 ## 自己手动更新数据库
