@@ -12,7 +12,7 @@
 
 ## 数据库文件更新日期
 
-2018年3月25日更新，数据库为2018年3月20日版本
+2019年7月25日更新，数据库为2018年7月20日版本
 
 ## 使用说明
 
@@ -65,7 +65,17 @@ echo json_encode(IpLocation::getLocation($ip), JSON_UNESCAPED_UNICODE) . "\n";
 {"ip":"60.195.153.98","country":"中国","province":"北京","city":"顺义区","county":"","isp":"","area":"中国北京顺义区后沙峪金龙网吧"}
 ```
 
-## 自己手动更新数据库
+## 更新数据库
+
+### 在线直接更新
+
+更新到源码目录
+`php ~/bin/update-ip.php`
+
+更新到指定目录
+`php ~/bin/update-ip.php -d=/tmp`
+
+### 【或者】自己手动更新数据库
 
 1，http://www.cz88.net/fox/ipdat.shtml
 下载数据库程序（Windows 环境），执行完毕后，即可在程序安装目录找到数据库文件 qqwry.dat
@@ -83,6 +93,8 @@ echo json_encode(IpLocation::getLocation($ip), JSON_UNESCAPED_UNICODE) . "\n";
 
 ```
  IP 地理位置查询类
+ 
+ 2019-07-25 赵彬言         1，增加自动更新功能，参考 https://blog.shuax.com/archives/QQWryUpdate.html 感谢 https://github.com/itbdw/ip-database/issues/10
  
  2017-09-12 赵彬言         1，缩减返回数据，去掉字段 remark smallarea beginip endip
                           2，将调用改为单例模式，保证只读取一次文件
