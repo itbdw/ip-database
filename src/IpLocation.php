@@ -251,16 +251,25 @@ class IpLocation
                         //直辖市
                         if (in_array($value, $this->dict_city_directly)) {
                             $_tmp_province = explode($seperator_shi, $location['country']);
-                            //直辖市
-                            $location['province'] = $_tmp_province[0];
 
-                            //市辖区
-                            if (isset($_tmp_province[1])) {
-                                if (strpos($_tmp_province[1], $seperator_qu) !== false) {
-                                    $_tmp_qu = explode($seperator_qu, $_tmp_province[1]);
-                                    $location['city'] = $_tmp_qu[0] . $seperator_qu;
+                            // 上海市浦江区xxx
+                            if ($_tmp_province[0] == $value) {
+                                //直辖市
+                                $location['province'] = $_tmp_province[0];
+
+                                //市辖区
+                                if (isset($_tmp_province[1])) {
+                                    if (strpos($_tmp_province[1], $seperator_qu) !== false) {
+                                        $_tmp_qu = explode($seperator_qu, $_tmp_province[1]);
+                                        $location['city'] = $_tmp_qu[0] . $seperator_qu;
+                                    }
                                 }
+                            } else {
+                                //上海交通大学
+                                $location['province'] = $value;
+                                $location['org_area'] = $location['org_country'] . $location['org_area'];
                             }
+
                         } else {
                             //省
                             $location['province'] = $value;
@@ -268,11 +277,11 @@ class IpLocation
                             //没有省份标志 只能替换
                             $_tmp_city = str_replace($location['province'], '', $location['country']);
 
-				//防止直辖市捣乱 上海市xxx区 =》 市xx区
-			    $_tmp_shi_pos = mb_stripos($_tmp_city, $seperator_shi);
-			    if ($_tmp_shi_pos === 0) {
-				$_tmp_city = mb_substr($_tmp_city, 1);	
-			    }
+                            //防止直辖市捣乱 上海市xxx区 =》 市xx区
+                            $_tmp_shi_pos = mb_stripos($_tmp_city, $seperator_shi);
+                            if ($_tmp_shi_pos === 0) {
+                                $_tmp_city = mb_substr($_tmp_city, 1);
+                            }
 
                             //内蒙古 类型的 获取市县信息
                             if (strpos($_tmp_city, $seperator_shi) !== false) {
@@ -325,7 +334,6 @@ class IpLocation
 
             $result['area'] = $location['country'] . $location['province'] . $location['city'] . $location['county'] . $location['org_area'];
         }
-
         return $result; //array
     }
 
