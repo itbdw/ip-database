@@ -56,6 +56,16 @@ echo json_encode(IpLocation::getLocation($ip), JSON_UNESCAPED_UNICODE) . "\n";
 }
 ```
 
+
+## 测试
+
+```
+php tests/ip.php
+
+php tests/ip.php -i 58.196.128.0 
+
+```
+
 ## 典型返回
 ```
 {"ip":"172.217.25.14","country":"美国","province":"","city":"","county":"","isp":"","area":"美国加利福尼亚州圣克拉拉县山景市谷歌公司"}
@@ -73,7 +83,7 @@ echo json_encode(IpLocation::getLocation($ip), JSON_UNESCAPED_UNICODE) . "\n";
 `php ~/bin/update-ip.php`
 
 更新到指定目录
-`php ~/bin/update-ip.php -d=/tmp`
+`php ~/bin/update-ip.php -d /tmp`
 
 ### 【或者】自己手动更新数据库
 
