@@ -4,8 +4,9 @@
  *
  * @author    马秉尧，赵彬言<itbudaoweng@gmail.com>
  * @version   2.0
- * @copyright 2005 CoolCode.CN，2012-2017 itbdw.com
+ * @copyright 2005 CoolCode.CN，2012-2019 itbdw.com
  */
+
 namespace itbdw\Ip;
 
 /**
@@ -16,8 +17,7 @@ namespace itbdw\Ip;
  *
  * @package itbdw\IpLocation
  */
-class IpLocation
-{
+class IpLocation {
     private static $instance;
 
     /**
@@ -119,17 +119,17 @@ class IpLocation
     /**
      * 构造函数，打开 qqwry.dat 文件并初始化类中的信息
      *
-     * @return IpLocation
+     * IpLocation constructor.
+     *
+     * @param null $filepath
      */
-    private final function __construct($filepath = null)
-    {
+    private final function __construct($filepath = null) {
         $this->init($filepath);
     }
 
-    private function init($filepath)
-    {
+    private function init($filepath) {
         $filename = __DIR__ . '/qqwry.dat';
-	if ($filepath) {
+        if ($filepath) {
             $filename = $filepath;
         }
 
@@ -141,7 +141,7 @@ class IpLocation
         $this->fp = 0;
         if (($this->fp = fopen($filename, 'rb')) !== false) {
             $this->firstip = $this->getlong();
-            $this->lastip = $this->getlong();
+            $this->lastip  = $this->getlong();
             $this->totalip = ($this->lastip - $this->firstip) / 7;
         }
     }
@@ -152,8 +152,7 @@ class IpLocation
      * @access private
      * @return int
      */
-    private function getlong()
-    {
+    private function getlong() {
         //将读取的little-endian编码的4个字节转化为长整型数
         $result = unpack('Vlong', fread($this->fp, 4));
 
@@ -161,11 +160,11 @@ class IpLocation
     }
 
     /**
-     * @param $ip
+     * @param      $ip
+     * @param null $filepath
      * @return array
      */
-    public static function getLocation($ip, $filepath = null)
-    {
+    public static function getLocation($ip, $filepath = null) {
         if (self::$instance === null) {
             self::$instance = new self($filepath);
         }
@@ -190,14 +189,13 @@ class IpLocation
      * @param $ip
      * @return array
      */
-    private function getAddr($ip)
-    {
-        $result = [];
-        $is_china = false;
+    private function getAddr($ip) {
+        $result          = [];
+        $is_china        = false;
         $seperator_sheng = '省';
-        $seperator_shi = '市';
-        $seperator_xian = '县';
-        $seperator_qu = '区';
+        $seperator_shi   = '市';
+        $seperator_xian  = '县';
+        $seperator_qu    = '区';
 
         if (!$this->isValidIpV4($ip)) {
             $result['error'] = 'ip invalid';
@@ -230,18 +228,17 @@ class IpLocation
                     //县
                     if (isset($_tmp_city[1])) {
                         if (strpos($_tmp_city[1], $seperator_xian) !== false) {
-                            $_tmp_county = explode($seperator_xian, $_tmp_city[1]);
+                            $_tmp_county        = explode($seperator_xian, $_tmp_city[1]);
                             $location['county'] = $_tmp_county[0] . $seperator_xian;
                         }
 
                         //区
                         if (!$location['county'] && strpos($_tmp_city[1], $seperator_qu) !== false) {
-                            $_tmp_qu = explode($seperator_qu, $_tmp_city[1]);
+                            $_tmp_qu            = explode($seperator_qu, $_tmp_city[1]);
                             $location['county'] = $_tmp_qu[0] . $seperator_qu;
                         }
                     }
                 }
-
             } else {
                 //处理内蒙古不带省份类型的和直辖市
                 foreach ($this->dict_province as $key => $value) {
@@ -260,7 +257,7 @@ class IpLocation
                                 //市辖区
                                 if (isset($_tmp_province[1])) {
                                     if (strpos($_tmp_province[1], $seperator_qu) !== false) {
-                                        $_tmp_qu = explode($seperator_qu, $_tmp_province[1]);
+                                        $_tmp_qu          = explode($seperator_qu, $_tmp_province[1]);
                                         $location['city'] = $_tmp_qu[0] . $seperator_qu;
                                     }
                                 }
@@ -269,7 +266,6 @@ class IpLocation
                                 $location['province'] = $value;
                                 $location['org_area'] = $location['org_country'] . $location['org_area'];
                             }
-
                         } else {
                             //省
                             $location['province'] = $value;
@@ -293,13 +289,13 @@ class IpLocation
                                 //县
                                 if (isset($_tmp_city[1])) {
                                     if (strpos($_tmp_city[1], $seperator_xian) !== false) {
-                                        $_tmp_county = explode($seperator_xian, $_tmp_city[1]);
+                                        $_tmp_county        = explode($seperator_xian, $_tmp_city[1]);
                                         $location['county'] = $_tmp_county[0] . $seperator_xian;
                                     }
 
                                     //区
                                     if (!$location['county'] && strpos($_tmp_city[1], $seperator_qu) !== false) {
-                                        $_tmp_qu = explode($seperator_qu, $_tmp_city[1]);
+                                        $_tmp_qu            = explode($seperator_qu, $_tmp_city[1]);
                                         $location['county'] = $_tmp_qu[0] . $seperator_qu;
                                     }
                                 }
@@ -309,7 +305,6 @@ class IpLocation
                         break;
                     }
                 }
-
             }
 
             if ($is_china) {
@@ -326,11 +321,11 @@ class IpLocation
 //            $result['org_country']    = $location['org_country'];  //纯真数据库返回的列1
 //            $result['org_area'] = $location['org_area'];
 
-            $result['country'] = $location['country'];
+            $result['country']  = $location['country'];
             $result['province'] = $location['province'];
-            $result['city'] = $location['city'];
-            $result['county'] = $location['county'];
-            $result['isp'] = $location['isp'];
+            $result['city']     = $location['city'];
+            $result['county']   = $location['county'];
+            $result['isp']      = $location['isp'];
 
             $result['area'] = $location['country'] . $location['province'] . $location['city'] . $location['county'] . $location['org_area'];
         }
@@ -341,8 +336,7 @@ class IpLocation
      * @param $ip
      * @return bool
      */
-    private function isValidIpV4($ip)
-    {
+    private function isValidIpV4($ip) {
         $flag = false !== filter_var($ip, FILTER_VALIDATE_IP, FILTER_FLAG_IPV4);
 
         return $flag;
@@ -355,8 +349,7 @@ class IpLocation
      * @param string $ip
      * @return array
      */
-    private function getlocationfromip($ip)
-    {
+    private function getlocationfromip($ip) {
         if (!$this->fp) {
             return null;
         } // 如果数据文件没有被正确打开，则直接返回空
@@ -366,8 +359,8 @@ class IpLocation
         $ip = $this->packip($location['ip']); // 将输入的IP地址转化为可比较的IP地址
         // 不合法的IP地址会被转化为255.255.255.255
         // 对分搜索
-        $l = 0; // 搜索的下边界
-        $u = $this->totalip; // 搜索的上边界
+        $l      = 0; // 搜索的下边界
+        $u      = $this->totalip; // 搜索的上边界
         $findip = $this->lastip; // 如果没有找到就返回最后一条IP记录（qqwry.dat的版本信息）
         while ($l <= $u) { // 当上边界小于下边界时，查找失败
             $i = floor(($l + $u) / 2); // 计算近似中间记录
@@ -392,10 +385,10 @@ class IpLocation
         //获取查找到的IP地理位置信息
         fseek($this->fp, $findip);
         $location['beginip'] = long2ip($this->getlong()); // 用户IP所在范围的开始地址
-        $offset = $this->getlong3();
+        $offset              = $this->getlong3();
         fseek($this->fp, $offset);
         $location['endip'] = long2ip($this->getlong()); // 用户IP所在范围的结束地址
-        $byte = fread($this->fp, 1); // 标志字节
+        $byte              = fread($this->fp, 1); // 标志字节
         switch (ord($byte)) {
             case 1: // 标志字节为1，表示国家和区域信息都被同时重定向
                 $countryOffset = $this->getlong3(); // 重定向地址
@@ -410,7 +403,7 @@ class IpLocation
                         break;
                     default: // 否则，表示国家信息没有被重定向
                         $location['country'] = $this->getstring($byte);
-                        $location['area'] = $this->getarea();
+                        $location['area']    = $this->getarea();
                         break;
                 }
                 break;
@@ -422,12 +415,12 @@ class IpLocation
                 break;
             default: // 否则，表示国家信息没有被重定向
                 $location['country'] = $this->getstring($byte);
-                $location['area'] = $this->getarea();
+                $location['area']    = $this->getarea();
                 break;
         }
 
         $location['country'] = iconv("GBK", "UTF-8", $location['country']);
-        $location['area'] = iconv("GBK", "UTF-8", $location['area']);
+        $location['area']    = iconv("GBK", "UTF-8", $location['area']);
 
         if ($location['country'] == " CZ88.NET" || $location['country'] == "纯真网络") { // CZ88.NET表示没有有效信息
             $location['country'] = "无数据";
@@ -446,8 +439,7 @@ class IpLocation
      * @param string $ip
      * @return string
      */
-    private function packip($ip)
-    {
+    private function packip($ip) {
         // 将IP地址转化为长整型数，如果在PHP5中，IP地址错误，则返回False，
         // 这时intval将Flase转化为整数-1，之后压缩成big-endian编码的字符串
         return pack('N', intval($this->ip2long($ip)));
@@ -461,8 +453,7 @@ class IpLocation
      * @param string $ip 要转换的 ip 地址
      * @return int    转换完成的数字
      */
-    private function ip2long($ip)
-    {
+    private function ip2long($ip) {
         $ip_arr = explode('.', $ip);
         $iplong = (16777216 * intval($ip_arr[0])) + (65536 * intval($ip_arr[1])) + (256 * intval($ip_arr[2])) + intval($ip_arr[3]);
 
@@ -475,8 +466,7 @@ class IpLocation
      * @access private
      * @return int
      */
-    private function getlong3()
-    {
+    private function getlong3() {
         //将读取的little-endian编码的3个字节转化为长整型数
         $result = unpack('Vlong', fread($this->fp, 3) . chr(0));
 
@@ -490,8 +480,7 @@ class IpLocation
      * @param string $data
      * @return string
      */
-    private function getstring($data = "")
-    {
+    private function getstring($data = "") {
         $char = fread($this->fp, 1);
         while (ord($char) > 0) { // 字符串按照C格式保存，以\0结束
             $data .= $char; // 将读取的字符连接到给定字符串之后
@@ -507,8 +496,7 @@ class IpLocation
      * @access private
      * @return string
      */
-    private function getarea()
-    {
+    private function getarea() {
         $byte = fread($this->fp, 1); // 标志字节
         switch (ord($byte)) {
             case 0: // 没有区域信息
@@ -531,8 +519,7 @@ class IpLocation
      * @param $str
      * @return string
      */
-    private function getIsp($str)
-    {
+    private function getIsp($str) {
         $ret = '';
 
         foreach ($this->dict_isp as $k => $v) {
@@ -548,8 +535,7 @@ class IpLocation
     /**
      * 析构函数，用于在页面执行结束后自动关闭打开的文件。
      */
-    public function __destruct()
-    {
+    public function __destruct() {
         if ($this->fp) {
             fclose($this->fp);
         }
