@@ -21,6 +21,23 @@
 
 date_default_timezone_set("PRC");
 
+function curls_get($url)
+{
+    $header = ["User-Agent: Mozilla/3.0 (compatible; Indy Library)", "Accept: text/html, /"];
+    $curl = curl_init();
+    curl_setopt_array($curl, array(
+        CURLOPT_SSL_VERIFYPEER => false,
+        CURLOPT_RETURNTRANSFER => true,
+        CURLOPT_TIMEOUT => 600,
+        CURLOPT_CUSTOMREQUEST => "GET",
+        CURLOPT_HTTPHEADER => $header,
+        CURLOPT_URL => $url,
+    ));
+    $res = curl_exec($curl);
+    curl_close($curl);
+    return $res;
+}
+
 //可设置为服务器特定目录，单独，避免组件升级互相影响
 $dir = dirname(__DIR__) . "/src";
 $option = getopt("d::");
@@ -36,14 +53,16 @@ $stime = microtime(true);
 echo "开始准备更新数据库" . date("Y-m-d H:i:s");
 echo "\n";
 
-$copywrite = file_get_contents("http://update.cz88.net/ip/copywrite.rar");
+$copywrite = curls_get("http://update.cz88.net/ip/copywrite.rar");
 
 if (!$copywrite) {
     $download_spend = $qqwry_time - $stime;
     die("copywrite.rar 下载失败 " . sprintf("下载耗时%s", $download_spend));
 }
 
-$qqwry      = file_get_contents("http://update.cz88.net/ip/qqwry.rar");
+error_log($copywrite);die;
+
+$qqwry      = curls_get("https://update.cz88.net/ip/qqwry.rar");
 $qqwry_time = microtime(true);
 
 if (!$qqwry) {
