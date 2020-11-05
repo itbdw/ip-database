@@ -87,16 +87,15 @@ php tests/ip.php -i 58.196.128.0
 
 ### 【或者】自己手动更新数据库
 
-1，http://www.cz88.net/fox/ipdat.shtml
+1，http://www.cz88.net/ip/
 下载数据库程序（Windows 环境），执行完毕后，即可在程序安装目录找到数据库文件 qqwry.dat
 
 2，复制到 src 目录，覆盖掉原文件即可；或者，把文件同步到服务器特定路径，但这种方式要求调用方法时传入
  qqwry.dat 的绝对路径。
 
-## Thanks
+## 数据库来源
 
-+ 1, qqwry.dat database provider http://www.cz88.net/fox/ipdat.shtml
-+ 2, class original provider 马秉尧
+纯真IP库，站长不易，烦请有能力的可以给纯真IP作者适当打赏 http://www.cz88.net/ip/
 
 
 ## update log
