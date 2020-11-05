@@ -160,9 +160,9 @@ class StringParser
 
                                 //解决 休息休息校区 变成城市区域
                                 $isHitBlackTail = false;
-                                $tail = mb_substr($_tmp_qu[0], -2);
                                 foreach ($this->dictDistrictBlackTails as $blackTail) {
-                                    if ($tail == $blackTail) {
+                                    //尾
+                                    if (mb_substr($_tmp_qu[0], -mb_strlen($blackTail)) == $blackTail) {
                                         $isHitBlackTail = true;
                                         break;
                                     }
