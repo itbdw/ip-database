@@ -61,10 +61,10 @@ class IpLocationV2 implements IpLocationInterface
     }
 
     private static function getIpV4Path() {
-        return self::$ipV4Path ? : __DIR__ . '/files/qqwry.dat';
+        return self::$ipV4Path ? : __DIR__ . '/qqwry.dat';
     }
     private static function getIpV6Path() {
-        return self::$ipV6Path ? : __DIR__ . '/files/ipv6wry.db';
+        return self::$ipV6Path ? : __DIR__ . '/ipv6wry.db';
     }
 
     private static function isIpV4($ip) {

@@ -32,6 +32,11 @@ class StringParser
         '上海',
     ];
 
+    private $dictDistrictBlackTails = [
+        '校区',
+        '学区',
+    ];
+
     /**
      * 中国省份
      *
@@ -149,9 +154,25 @@ class StringParser
 
                             $_tmp_province[1] = $this->lTrim($_tmp_province[1], $separatorCity);
 
+
                             if (strpos($_tmp_province[1], $separatorDistrict) !== false) {
                                 $_tmp_qu = explode($separatorDistrict, $_tmp_province[1]);
-                                $location['city'] = $_tmp_qu[0] . $separatorDistrict;
+
+                                //解决 休息休息校区 变成城市区域
+                                $isHitBlackTail = false;
+                                $tail = mb_substr($_tmp_qu[0], -2);
+                                foreach ($this->dictDistrictBlackTails as $blackTail) {
+                                    if ($tail == $blackTail) {
+                                        $isHitBlackTail = true;
+                                        break;
+                                    }
+                                }
+
+                                //校区，学区
+                                if ((!$isHitBlackTail) && mb_strlen($_tmp_qu[0]) < 5) {
+                                    //有点尴尬
+                                    $location['city'] = $_tmp_qu[0] . $separatorDistrict;
+                                }
                             }
                         }
                     } else {
