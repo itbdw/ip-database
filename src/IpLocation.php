@@ -160,16 +160,25 @@ class IpLocation {
     }
 
     /**
-     * @param      $ip
+     * @param null $filepath
+     * @return IpLocation
+     */
+    public static function getIn($filepath=null) {
+        if (self::$instance === null) {
+            self::$instance = new self($filepath);
+        }
+        return self::$instance;
+    }
+
+    /**
+     * @param $ip
      * @param null $filepath
      * @return array
      */
     public static function getLocation($ip, $filepath = null) {
-        if (self::$instance === null) {
-            self::$instance = new self($filepath);
-        }
+        $ins = self::getIn($filepath);
 
-        return self::$instance->getAddr($ip);
+        return $ins->getAddr($ip);
     }
 
     /**
@@ -201,133 +210,9 @@ class IpLocation {
             $result['error'] = 'ip invalid';
             return $result;
         } else {
-            $location = $this->getlocationfromip($ip); // $location[country] [area]
-            if (!$location) {
-                $result['error'] = 'file open failed';
-                return $result;
-            }
-
-            $location['org_country'] = $location['country']; //北京市朝阳区
-
-            $location['org_area'] = $location['area']; // 金桥国际小区
-
-            $location['province'] = $location['city'] = $location['county'] = '';
-
-            $_tmp_province = explode($seperator_sheng, $location['country']);
-            //存在 省 标志 xxx省yyyy 中的yyyy
-            if (isset($_tmp_province[1])) {
-                $is_china = true;
-                //省
-                $location['province'] = $_tmp_province[0]; //河北
-
-                if (strpos($_tmp_province[1], $seperator_shi) !== false) {
-                    $_tmp_city = explode($seperator_shi, $_tmp_province[1]);
-                    //市
-                    $location['city'] = $_tmp_city[0] . $seperator_shi;
-
-                    //县
-                    if (isset($_tmp_city[1])) {
-                        if (strpos($_tmp_city[1], $seperator_xian) !== false) {
-                            $_tmp_county        = explode($seperator_xian, $_tmp_city[1]);
-                            $location['county'] = $_tmp_county[0] . $seperator_xian;
-                        }
-
-                        //区
-                        if (!$location['county'] && strpos($_tmp_city[1], $seperator_qu) !== false) {
-                            $_tmp_qu            = explode($seperator_qu, $_tmp_city[1]);
-                            $location['county'] = $_tmp_qu[0] . $seperator_qu;
-                        }
-                    }
-                }
-            } else {
-                //处理内蒙古不带省份类型的和直辖市
-                foreach ($this->dict_province as $key => $value) {
-
-                    if (false !== strpos($location['country'], $value)) {
-                        $is_china = true;
-                        //直辖市
-                        if (in_array($value, $this->dict_city_directly)) {
-                            $_tmp_province = explode($seperator_shi, $location['country']);
-
-                            // 上海市浦江区xxx
-                            if ($_tmp_province[0] == $value) {
-                                //直辖市
-                                $location['province'] = $_tmp_province[0];
-
-                                //市辖区
-                                if (isset($_tmp_province[1])) {
-                                    if (strpos($_tmp_province[1], $seperator_qu) !== false) {
-                                        $_tmp_qu          = explode($seperator_qu, $_tmp_province[1]);
-                                        $location['city'] = $_tmp_qu[0] . $seperator_qu;
-                                    }
-                                }
-                            } else {
-                                //上海交通大学
-                                $location['province'] = $value;
-                                $location['org_area'] = $location['org_country'] . $location['org_area'];
-                            }
-                        } else {
-                            //省
-                            $location['province'] = $value;
-
-                            //没有省份标志 只能替换
-                            $_tmp_city = str_replace($location['province'], '', $location['country']);
-
-                            //防止直辖市捣乱 上海市xxx区 =》 市xx区
-                            $_tmp_shi_pos = mb_stripos($_tmp_city, $seperator_shi);
-                            if ($_tmp_shi_pos === 0) {
-                                $_tmp_city = mb_substr($_tmp_city, 1);
-                            }
-
-                            //内蒙古 类型的 获取市县信息
-                            if (strpos($_tmp_city, $seperator_shi) !== false) {
-                                //市
-                                $_tmp_city = explode($seperator_shi, $_tmp_city);
-
-                                $location['city'] = $_tmp_city[0] . $seperator_shi;
-
-                                //县
-                                if (isset($_tmp_city[1])) {
-                                    if (strpos($_tmp_city[1], $seperator_xian) !== false) {
-                                        $_tmp_county        = explode($seperator_xian, $_tmp_city[1]);
-                                        $location['county'] = $_tmp_county[0] . $seperator_xian;
-                                    }
-
-                                    //区
-                                    if (!$location['county'] && strpos($_tmp_city[1], $seperator_qu) !== false) {
-                                        $_tmp_qu            = explode($seperator_qu, $_tmp_city[1]);
-                                        $location['county'] = $_tmp_qu[0] . $seperator_qu;
-                                    }
-                                }
-                            }
-                        }
-
-                        break;
-                    }
-                }
-            }
-
-            if ($is_china) {
-                $location['country'] = '中国';
-            }
-
-            $location['isp'] = $this->getIsp($location['area']);
-
-            $result['ip'] = $location['ip'];
-
-//            $result['beginip']   = $location['beginip'];
-//            $result['endip']     = $location['endip'];
-
-//            $result['org_country']    = $location['org_country'];  //纯真数据库返回的列1
-//            $result['org_area'] = $location['org_area'];
-
-            $result['country']  = $location['country'];
-            $result['province'] = $location['province'];
-            $result['city']     = $location['city'];
-            $result['county']   = $location['county'];
-            $result['isp']      = $location['isp'];
-
-            $result['area'] = $location['country'] . $location['province'] . $location['city'] . $location['county'] . $location['org_area'];
+            $location = $this->getlocationfromip($ip);
+            $stringParser = new StringParser();
+            $result = $stringParser->parse($location);
         }
         return $result; //array
     }
@@ -340,6 +225,10 @@ class IpLocation {
         $flag = false !== filter_var($ip, FILTER_VALIDATE_IP, FILTER_FLAG_IPV4);
 
         return $flag;
+    }
+
+    public function getOriginalLocation($ip) {
+        return $this->getlocationfromip($ip);
     }
 
     /**

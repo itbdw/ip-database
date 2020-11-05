@@ -5,12 +5,14 @@
  */
 
 //you do not need to do this if use composer!
+use itbdw\Ip\IpLocation;
+use itbdw\Ip\StringParser;
+
 require dirname(__DIR__) . '/src/IpLocation.php';
 require dirname(__DIR__) . '/src/StringParser.php';
 
-$input = getopt("i:", ['ip:']);
+$in = IpLocation::getIn();
 
-use itbdw\Ip\IpLocation;
 
 $ips = [
     "172.217.25.14",//美国
@@ -23,25 +25,22 @@ $ips = [
     "218.193.183.35", //"province":"上海交通大学闵行校区",
     "210.74.2.227", //,"province":"北京工业大学","city":"",
     "162.105.217.0", //,"province":"北京大学万柳学区","ci
-
-
-
 ];
 
-if (isset($input['i']) || isset($input['ip'])) {
-    $ips = [];
-
-    if (isset($input['i'])) {
-        $ips[] = $input['i'];
-    }
-
-    if (isset($input['ip'])) {
-        $ips[] = $input['ip'];
-    }
-}
+$obj = new StringParser();
+$location = [
+    'country' => '中国',
+    'area' => '',
+];
 
 foreach ($ips as $ip) {
-    echo json_encode(IpLocation::getLocation($ip), JSON_UNESCAPED_UNICODE) . "\n";
+    $location = $in->getOriginalLocation($ip);
+
+    var_dump($location);
+    var_dump($obj->parse($location));
+
 }
+
+//var_dump($obj->parse($location));
 
 
