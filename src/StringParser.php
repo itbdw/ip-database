@@ -11,7 +11,7 @@ class StringParser
      *
      * @var array
      */
-    private $dict_isp = [
+    private $dictIsp = [
         '联通',
         '移动',
         '铁通',
@@ -25,7 +25,7 @@ class StringParser
      *
      * @var array
      */
-    private $dict_city_directly = [
+    private $dictCityDirectly = [
         '北京',
         '天津',
         '重庆',
@@ -37,7 +37,7 @@ class StringParser
      *
      * @var array
      */
-    private $dict_province = [
+    private $dictProvince = [
         '北京',
         '天津',
         '重庆',
@@ -77,6 +77,7 @@ class StringParser
     /**
      * $location = [
      *  'country', 'area'
+     * 'ip', 'beginip', 'endip'
      * ];
      *
      * @param $location
@@ -84,12 +85,13 @@ class StringParser
      */
     public function parse($location)
     {
+        $org = $location;
         $result = [];
-        $is_china = false;
-        $seperator_sheng = '省';
-        $seperator_shi = '市';
-        $seperator_xian = '县';
-        $seperator_qu = '区';
+        $isChina = false;
+        $separatorProvince = '省';
+        $separatorCity = '市';
+        $separatorCounty = '县';
+        $separatorDistrict = '区';
 
         if (!$location) {
             $result['error'] = 'file open failed';
@@ -102,90 +104,82 @@ class StringParser
 
         $location['province'] = $location['city'] = $location['county'] = '';
 
-        $_tmp_province = explode($seperator_sheng, $location['country']);
+        $_tmp_province = explode($separatorProvince, $location['country']);
         //存在 省 标志 xxx省yyyy 中的yyyy
         if (isset($_tmp_province[1])) {
-            $is_china = true;
+            $isChina = true;
             //省
             $location['province'] = $_tmp_province[0]; //河北
 
-            if (strpos($_tmp_province[1], $seperator_shi) !== false) {
-                $_tmp_city = explode($seperator_shi, $_tmp_province[1]);
+            if (strpos($_tmp_province[1], $separatorCity) !== false) {
+                $_tmp_city = explode($separatorCity, $_tmp_province[1]);
                 //市
-                $location['city'] = $_tmp_city[0] . $seperator_shi;
+                $location['city'] = $_tmp_city[0] . $separatorCity;
 
                 //县
                 if (isset($_tmp_city[1])) {
-                    if (strpos($_tmp_city[1], $seperator_xian) !== false) {
-                        $_tmp_county = explode($seperator_xian, $_tmp_city[1]);
-                        $location['county'] = $_tmp_county[0] . $seperator_xian;
+                    if (strpos($_tmp_city[1], $separatorCounty) !== false) {
+                        $_tmp_county = explode($separatorCounty, $_tmp_city[1]);
+                        $location['county'] = $_tmp_county[0] . $separatorCounty;
                     }
 
                     //区
-                    if (!$location['county'] && strpos($_tmp_city[1], $seperator_qu) !== false) {
-                        $_tmp_qu = explode($seperator_qu, $_tmp_city[1]);
-                        $location['county'] = $_tmp_qu[0] . $seperator_qu;
+                    if (!$location['county'] && strpos($_tmp_city[1], $separatorDistrict) !== false) {
+                        $_tmp_qu = explode($separatorDistrict, $_tmp_city[1]);
+                        $location['county'] = $_tmp_qu[0] . $separatorDistrict;
                     }
                 }
             }
         } else {
             //处理内蒙古不带省份类型的和直辖市
-            foreach ($this->dict_province as $key => $value) {
+            foreach ($this->dictProvince as $key => $value) {
 
                 if (false !== strpos($location['country'], $value)) {
-                    $is_china = true;
+                    $isChina = true;
+                    $location['province'] = $value;
+
                     //直辖市
-                    if (in_array($value, $this->dict_city_directly)) {
-                        $_tmp_province = explode($seperator_shi, $location['country']);
+                    if (in_array($value, $this->dictCityDirectly)) {
 
-                        // 上海市浦江区xxx
-                        if ($_tmp_province[0] == $value) {
-                            //直辖市
-                            $location['province'] = $_tmp_province[0];
+                        //直辖市
+                        $_tmp_province = explode($value, $location['country']);
 
-                            //市辖区
-                            if (isset($_tmp_province[1])) {
-                                if (strpos($_tmp_province[1], $seperator_qu) !== false) {
-                                    $_tmp_qu = explode($seperator_qu, $_tmp_province[1]);
-                                    $location['city'] = $_tmp_qu[0] . $seperator_qu;
-                                }
+                        //市辖区
+                        if (isset($_tmp_province[1])) {
+
+                            $_tmp_province[1] = $this->lTrim($_tmp_province[1], $separatorCity);
+
+                            if (strpos($_tmp_province[1], $separatorDistrict) !== false) {
+                                $_tmp_qu = explode($separatorDistrict, $_tmp_province[1]);
+                                $location['city'] = $_tmp_qu[0] . $separatorDistrict;
                             }
-                        } else {
-                            //上海交通大学
-                            $location['province'] = $value;
-                            $location['org_area'] = $location['org_country'] . $location['org_area'];
                         }
                     } else {
-                        //省
-                        $location['province'] = $value;
 
                         //没有省份标志 只能替换
                         $_tmp_city = str_replace($location['province'], '', $location['country']);
 
                         //防止直辖市捣乱 上海市xxx区 =》 市xx区
-                        $_tmp_shi_pos = mb_stripos($_tmp_city, $seperator_shi);
-                        if ($_tmp_shi_pos === 0) {
-                            $_tmp_city = mb_substr($_tmp_city, 1);
-                        }
+                        $_tmp_city = $this->lTrim($_tmp_city, $separatorCity);
 
                         //内蒙古 类型的 获取市县信息
-                        if (strpos($_tmp_city, $seperator_shi) !== false) {
+                        if (strpos($_tmp_city, $separatorCity) !== false) {
                             //市
-                            $_tmp_city = explode($seperator_shi, $_tmp_city);
+                            $_tmp_city = explode($separatorCity, $_tmp_city);
 
-                            $location['city'] = $_tmp_city[0] . $seperator_shi;
+                            $location['city'] = $_tmp_city[0] . $separatorCity;
 
                             //县
                             if (isset($_tmp_city[1])) {
-                                if (strpos($_tmp_city[1], $seperator_xian) !== false) {
-                                    $_tmp_county = explode($seperator_xian, $_tmp_city[1]);
-                                    $location['county'] = $_tmp_county[0] . $seperator_xian;
+                                if (strpos($_tmp_city[1], $separatorCounty) !== false) {
+                                    $_tmp_county = explode($separatorCounty, $_tmp_city[1]);
+                                    $location['county'] = $_tmp_county[0] . $separatorCounty;
                                 }
 
                                 //区
-                                if (!$location['county'] && strpos($_tmp_city[1], $seperator_qu) !== false) {
-                                    $_tmp_qu = explode($seperator_qu, $_tmp_city[1]);
-                                    $location['county'] = $_tmp_qu[0] . $seperator_qu;
+                                if (!$location['county'] && strpos($_tmp_city[1], $separatorDistrict) !== false) {
+                                    $_tmp_qu = explode($separatorDistrict, $_tmp_city[1]);
+                                    $location['county'] = $_tmp_qu[0] . $separatorDistrict;
                                 }
                             }
                         }
@@ -196,27 +190,30 @@ class StringParser
             }
         }
 
-        if ($is_china) {
+        if ($isChina) {
             $location['country'] = '中国';
         }
 
-        $location['isp'] = $this->getIsp($location['area']);
+//        $location['isp'] = $this->getIsp($location['area']);
 
         $result['ip'] = $location['ip'];
 
 //            $result['beginip']   = $location['beginip'];
 //            $result['endip']     = $location['endip'];
-
-//            $result['org_country']    = $location['org_country'];  //纯真数据库返回的列1
-//            $result['org_area'] = $location['org_area'];
+//
+//        $result['org_country']    = $location['org_country'];  //纯真数据库返回的列1
+//        $result['org_area'] = $location['org_area'];
 
         $result['country'] = $location['country'];
         $result['province'] = $location['province'];
         $result['city'] = $location['city'];
         $result['county'] = $location['county'];
-        $result['isp'] = $location['isp'];
 
         $result['area'] = $location['country'] . $location['province'] . $location['city'] . $location['county'] . $location['org_area'];
+
+        $result['isp'] = $this->getIsp($result['area']);
+
+        $result['org'] = $org;
 
         return $result;
     }
@@ -230,7 +227,7 @@ class StringParser
     {
         $ret = '';
 
-        foreach ($this->dict_isp as $k => $v) {
+        foreach ($this->dictIsp as $k => $v) {
             if (false !== strpos($str, $v)) {
                 $ret = $v;
                 break;
@@ -239,5 +236,14 @@ class StringParser
 
         return $ret;
     }
+
+    private function lTrim($word, $w) {
+        $pos = mb_stripos($word, $w);
+        if ($pos === 0) {
+            $word = mb_substr($word, 1);
+        }
+        return $word;
+    }
+
 
 }
