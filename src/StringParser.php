@@ -230,7 +230,7 @@ class StringParser
         $result['city'] = $location['city'];
         $result['county'] = $location['county'];
 
-        $result['area'] = $location['country'] . $location['province'] . $location['city'] . $location['county'] . $location['org_area'];
+        $result['area'] = $location['country'] . $location['province'] . $location['city'] . $location['county'] . ' ' . $location['org_area'];
 
         $result['isp'] = $this->getIsp($result['area']);
 
