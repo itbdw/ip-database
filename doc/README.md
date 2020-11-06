@@ -5,5 +5,5 @@
 其中
 
 * qqwry.pdf 来自中国科大教工服务器
-* 格式详解-ipdb.txt 格式详解-qqwry.txt 均来自 http://ip.zxinc.org/ 软件包里的说明
+* 格式详解-ipdb.txt 和 格式详解-qqwry.txt 来自 http://ip.zxinc.org/ 软件包里的说明
 

@@ -23,7 +23,9 @@ date_default_timezone_set("PRC");
 
 function curls_get($url)
 {
-    $header = ["User-Agent: Mozilla/3.0 (compatible; Indy Library)", "Accept: text/html, /"];
+//    $header = ["User-Agent: Mozilla/3.0 (compatible; Indy Library)", "Host: update.cz88.net"];
+    $header = ["User-Agent: Mozilla/3.0 (compatible; Indy Library)", "Host: update.cz88.net", "Accept: text/html, /"];
+
     $curl = curl_init();
     curl_setopt_array($curl, array(
         CURLOPT_SSL_VERIFYPEER => false,
@@ -34,6 +36,11 @@ function curls_get($url)
         CURLOPT_URL => $url,
     ));
     $res = curl_exec($curl);
+
+    if (curl_errno($curl)) {
+        error_log("curl error " . curl_errno($curl) . ' ' . curl_error($curl));
+    }
+
     curl_close($curl);
     return $res;
 }
@@ -60,7 +67,6 @@ if (!$copywrite) {
     die("copywrite.rar 下载失败 " . sprintf("下载耗时%s", $download_spend));
 }
 
-error_log($copywrite);die;
 
 $qqwry      = curls_get("https://update.cz88.net/ip/qqwry.rar");
 $qqwry_time = microtime(true);
