@@ -5,7 +5,11 @@
  */
 
 //you do not need to do this if use composer!
+require dirname(__DIR__) . '/src/parser/IpParserInterface.php';
+
 require dirname(__DIR__) . '/src/IpLocation.php';
+require dirname(__DIR__) . '/src/parser/QQwry.php';
+require dirname(__DIR__) . '/src/parser/IpV6wry.php';
 require dirname(__DIR__) . '/src/StringParser.php';
 
 $input = getopt("i:", ['ip:']);
@@ -24,6 +28,8 @@ $ips = [
     "210.74.2.227", //,"province":"北京工业大学","city":"",
     "162.105.217.0", //,"province":"北京大学万柳学区","ci
 
+    "fe80:0000:0001:0000:0440:44ff:1233:5678",
+    "2409:8900:103f:14f:d7e:cd36:11af:be83"
 
 
 ];
