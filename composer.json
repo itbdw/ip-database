@@ -1,21 +1,19 @@
 {
   "name": "itbdw/ip-database",
   "type": "library",
-  "description": "免费IP数据库，IP 地址库(纯真IP地址库，输出格式为国家、省、市、县、运营商)❤️ 🇨🇳，中文数据库，方便实用",
+  "description": "免费IP地址数据库(纯真IP地址数据库，输出格式为国家、省、市、县、运营商)❤️ 🇨🇳，中文数据库",
   "keywords": [
     "ip",
     "database",
     "location",
     "数据库",
     "IP地址库",
-    "IP数据库"
-    "纯真",
+    "IP数据库",
+    "纯真IP地址库",
+    "qqwry"
   ],
   "license": "MIT",
   "authors": [
-    {
-      "name": "马秉尧"
-    },
     {
       "name": "itbdw",
       "email": "itbudaoweng@gmail.com",

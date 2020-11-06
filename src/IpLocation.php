@@ -2,11 +2,10 @@
 /**
  * IP 地理位置查询类
  *
- * @author    马秉尧，赵彬言<itbudaoweng@gmail.com>
+ * @author    赵彬言<itbudaoweng@gmail.com>
  * @version   2.0
- * @copyright 2005 CoolCode.CN，2012-2019 itbdw.com
+ * @copyright 2012-2021 itbdw.com
  */
-
 namespace itbdw\Ip;
 
 /**
@@ -21,7 +20,7 @@ class IpLocation {
     private static $instance;
 
     /**
-     * qqwry.dat文件指针
+     * qqwry.dat 文件指针
      *
      * @var resource
      */
@@ -59,7 +58,7 @@ class IpLocation {
         '铁通',
         '电信',
         '长城',
-        '聚友',
+        '鹏博士',
     ];
 
     /**
