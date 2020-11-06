@@ -17,8 +17,9 @@ PHP5即可，本地安装，无网络依赖，只需要 php 环境即可本地�
 
 ## 使用说明
 
+仅安装2.x版本，保障兼容性
 ```
-composer require 'itbdw/ip-database'
+composer require itbdw/ip-database ^2.0
 ```
 
 ```php
