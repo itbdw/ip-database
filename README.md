@@ -98,8 +98,12 @@ http://www.cz88.net/ip/ 下载数据库程序（Windows 环境），执行完毕
 
 ## 赞助喝口水
 这个项目也是多个日夜思考的结果，如果觉得对你有帮助，小手一抖也是感谢的。
-![img](https://wx1.sinaimg.cn/mw690/6b94a2e5ly1gl0wztyez2j20p00ygq78.jpg)
-![img](https://wx1.sinaimg.cn/mw690/6b94a2e5ly1gl0wztevpxj20yi1aujwb.jpg)
+<div style="float:left;border:solid 1px 000;margin:2px;">
+  <img src="https://wx1.sinaimg.cn/mw690/6b94a2e5ly1gl0wztyez2j20p00ygq78.jpg"  width="200" height="260" >
+</div>
+<div style="float:left;border:solid 1px 000;margin:2px;">
+  <img src="https://wx1.sinaimg.cn/mw690/6b94a2e5ly1gl0wztevpxj20yi1aujwb.jpg"  width="200" height="260" >
+</div>
 
 ## 感谢
 1，纯真IP库，站长维护多年，实属不易，烦请有能力的客观前往官方站点给站长赞赏 http://www.cz88.net/ip/
