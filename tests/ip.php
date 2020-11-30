@@ -5,12 +5,15 @@
  */
 
 //you do not need to do this if use composer!
-require dirname(__DIR__) . '/src/ipparser/IpParserInterface.php';
+//require dirname(__DIR__) . '/src/ipparser/IpParserInterface.php';
+//
+//require dirname(__DIR__) . '/src/IpLocation.php';
+//require dirname(__DIR__) . '/src/ipparser/QQwry.php';
+//require dirname(__DIR__) . '/src/ipparser/IpV6wry.php';
+//require dirname(__DIR__) . '/src/StringParser.php';
 
-require dirname(__DIR__) . '/src/IpLocation.php';
-require dirname(__DIR__) . '/src/ipparser/QQwry.php';
-require dirname(__DIR__) . '/src/ipparser/IpV6wry.php';
-require dirname(__DIR__) . '/src/StringParser.php';
+//需要 composer install 或者去掉上面注释，并注释这一行
+include dirname(__DIR__) .'/vendor/autoload.php';
 
 $input = getopt("i:", ['ip:']);
 

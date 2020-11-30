@@ -6,8 +6,23 @@ namespace itbdw\Ip;
 use itbdw\Ip\IpParser\QQwry;
 use itbdw\Ip\IpParser\IpV6wry;
 
+/**
+ *
+ */
+define("IP_DATABASE_ROOT_DIR", dirname(__DIR__));
+
+/**
+ * Class IpLocation
+ * @package itbdw\Ip
+ */
 class IpLocation {
+    /**
+     * @var
+     */
     private static $ipV4Path;
+    /**
+     * @var
+     */
     private static $ipV6Path;
 
     /**
@@ -60,28 +75,65 @@ class IpLocation {
         return StringParser::parse($location);
     }
 
+    /**
+     * @param $path
+     */
     public static function setIpV4Path($path)
     {
         self::$ipV4Path = $path;
     }
 
+    /**
+     * @param $path
+     */
     public static function setIpV6Path($path)
     {
         self::$ipV6Path = $path;
     }
 
+    /**
+     * @return string
+     */
     private static function getIpV4Path() {
-        return self::$ipV4Path ? : __DIR__ . '/libs/qqwry.dat';
-    }
-    private static function getIpV6Path() {
-        return self::$ipV6Path ? : __DIR__ . '/libs/ipv6wry.db';
+        return self::$ipV4Path ? : self::src('/libs/qqwry.dat');
     }
 
+    /**
+     * @return string
+     */
+    private static function getIpV6Path() {
+        return self::$ipV6Path ? : self::src('/libs/ipv6wry.db');
+    }
+
+    /**
+     * @param $ip
+     * @return bool
+     */
     private static function isIpV4($ip) {
         return false !== filter_var($ip, FILTER_VALIDATE_IP, FILTER_FLAG_IPV4);
     }
 
+    /**
+     * @param $ip
+     * @return bool
+     */
     private static function isIpV6($ip) {
         return false !== filter_var($ip, FILTER_VALIDATE_IP, FILTER_FLAG_IPV6);
+    }
+
+    /**
+     * @param $filename
+     * @return string
+     */
+    public static function src($filename) {
+        return self::root('/src'.$filename);
+    }
+
+    /**
+     * @param $filename
+     * @return string
+     */
+    public static function root($filename) {
+        return IP_DATABASE_ROOT_DIR . $filename;
     }
 }
