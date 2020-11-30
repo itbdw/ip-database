@@ -2,7 +2,7 @@
 /**
  *
  */
-namespace itbdw\Ip\Parser;
+namespace itbdw\Ip\IpParser;
 
 /**
  * Class IpV4

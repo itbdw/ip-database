@@ -1,6 +1,6 @@
 <?php
 
-namespace itbdw\Ip\Parser;
+namespace itbdw\Ip\IpParser;
 
 interface IpParserInterface
 {

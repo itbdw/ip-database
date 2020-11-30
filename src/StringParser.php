@@ -11,7 +11,7 @@ class StringParser
      *
      * @var array
      */
-    private $dictIsp = [
+    private static $dictIsp = [
         '联通',
         '移动',
         '铁通',
@@ -25,14 +25,14 @@ class StringParser
      *
      * @var array
      */
-    private $dictCityDirectly = [
+    private static $dictCityDirectly = [
         '北京',
         '天津',
         '重庆',
         '上海',
     ];
 
-    private $dictDistrictBlackTails = [
+    private static $dictDistrictBlackTails = [
         '校区',
         '学区',
     ];
@@ -42,7 +42,7 @@ class StringParser
      *
      * @var array
      */
-    private $dictProvince = [
+    private static $dictProvince = [
         '北京',
         '天津',
         '重庆',
@@ -88,7 +88,7 @@ class StringParser
      * @param $location
      * @return mixed
      */
-    public function parse($location)
+    public static function parse($location)
     {
         $org = $location;
         $result = [];
@@ -137,14 +137,14 @@ class StringParser
             }
         } else {
             //处理内蒙古不带省份类型的和直辖市
-            foreach ($this->dictProvince as $key => $value) {
+            foreach (self::$dictProvince as $key => $value) {
 
                 if (false !== strpos($location['country'], $value)) {
                     $isChina = true;
                     $location['province'] = $value;
 
                     //直辖市
-                    if (in_array($value, $this->dictCityDirectly)) {
+                    if (in_array($value, self::$dictCityDirectly)) {
 
                         //直辖市
                         $_tmp_province = explode($value, $location['country']);
@@ -152,7 +152,7 @@ class StringParser
                         //市辖区
                         if (isset($_tmp_province[1])) {
 
-                            $_tmp_province[1] = $this->lTrim($_tmp_province[1], $separatorCity);
+                            $_tmp_province[1] = self::lTrim($_tmp_province[1], $separatorCity);
 
 
                             if (strpos($_tmp_province[1], $separatorDistrict) !== false) {
@@ -160,7 +160,7 @@ class StringParser
 
                                 //解决 休息休息校区 变成城市区域
                                 $isHitBlackTail = false;
-                                foreach ($this->dictDistrictBlackTails as $blackTail) {
+                                foreach (self::$dictDistrictBlackTails as $blackTail) {
                                     //尾
                                     if (mb_substr($_tmp_qu[0], -mb_strlen($blackTail)) == $blackTail) {
                                         $isHitBlackTail = true;
@@ -181,7 +181,7 @@ class StringParser
                         $_tmp_city = str_replace($location['province'], '', $location['country']);
 
                         //防止直辖市捣乱 上海市xxx区 =》 市xx区
-                        $_tmp_city = $this->lTrim($_tmp_city, $separatorCity);
+                        $_tmp_city = self::lTrim($_tmp_city, $separatorCity);
 
                         //内蒙古 类型的 获取市县信息
                         if (strpos($_tmp_city, $separatorCity) !== false) {
@@ -215,7 +215,7 @@ class StringParser
             $location['country'] = '中国';
         }
 
-//        $location['isp'] = $this->getIsp($location['area']);
+//        $location['isp'] = self::getIsp($location['area']);
 
         $result['ip'] = $location['ip'];
 
@@ -232,7 +232,7 @@ class StringParser
 
         $result['area'] = $location['country'] . $location['province'] . $location['city'] . $location['county'] . ' ' . $location['org_area'];
 
-        $result['isp'] = $this->getIsp($result['area']);
+        $result['isp'] = self::getIsp($result['area']);
 
         $result['org'] = $org;
 
@@ -244,11 +244,11 @@ class StringParser
      * @param $str
      * @return string
      */
-    private function getIsp($str)
+    private static function getIsp($str)
     {
         $ret = '';
 
-        foreach ($this->dictIsp as $k => $v) {
+        foreach (self::$dictIsp as $k => $v) {
             if (false !== strpos($str, $v)) {
                 $ret = $v;
                 break;
@@ -258,7 +258,7 @@ class StringParser
         return $ret;
     }
 
-    private function lTrim($word, $w) {
+    private static function lTrim($word, $w) {
         $pos = mb_stripos($word, $w);
         if ($pos === 0) {
             $word = mb_substr($word, 1);
