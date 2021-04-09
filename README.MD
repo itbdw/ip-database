@@ -16,20 +16,11 @@
 
 ## 使用说明
 
-目前存在2.x版本（稳定版）和3.x版本（支持ipv6版）
 
-当前版本为3.x，如需要2.x请访问  https://github.com/itbdw/ip-database/tree/2.x
+当前版本为3.x（ipv4+ipv6），如需要2.x稳定版请访问  https://github.com/itbdw/ip-database/tree/2.x
 
-目前3.x无缝兼容2.x版本，可直接升级，但需做好验证。
+目前3.x无缝兼容2.x版本，理论上可直接升级，但需做好验证。
 
-目前3.x已完成的功能有
-
-- 支持ipv6
-- 2.x 平滑升级
-
-计划完成的功能有
-
-[] 解析民政部地区码，以便返回更加精确的城市信息；同时可携带其他信息，如地区码、经纬度等
 
 ```
 composer require 'itbdw/ip-database' dev-3.x
