@@ -1,10 +1,10 @@
 ## 说明
 
-这套识别程序的数据库是免费IP数据库、IP离线地址库。输入IP，输出结构化的国家、省、市、县、运营商、地区信息)
+这套识别程序的数据库是免费IP数据库、IP离线地址库。支持将IP转化为结构化的国家、省、市、县、运营商、地区信息)
 
 0，该数据库识别是离线的。
 
-1，该数据库基于纯真IP库，IP地址纠错相关请直接去纯真官网，下面有给出地址。纯真IP地址库，不可以用作商业用途，具体见 LICENSE。
+1，该数据库基于纯真IP库，IP地址纠错相关和最新地址获取请直接去纯真官网，下面有给出地址。
 
 2，纯真IP识别算法来源网络。
 
@@ -17,7 +17,8 @@ PHP5即可，本地安装，无网络依赖，只需要 php 环境即可本地�
 
 ## 使用说明
 
-仅安装2.x版本，保障兼容性
+当前版本为2.x 稳定版，仅支持ipv4，以后不再增加新功能。如需要ipv6，可访问 https://github.com/itbdw/ip-database/tree/3.x
+
 ```
 composer require itbdw/ip-database ^2.0
 ```
@@ -29,12 +30,13 @@ composer require itbdw/ip-database ^2.0
 
 use itbdw\Ip\IpLocation;
 
+//直接用附带的版本
+echo json_encode(IpLocation::getLocation($ip), JSON_UNESCAPED_UNICODE) . "\n";
+
 //支持自定义文件路径
 $qqwry_filepath = '/abspath/qqwry.dat';
 echo json_encode(IpLocation::getLocation($ip, $qqwry_filepath), JSON_UNESCAPED_UNICODE) . "\n";
 
-//直接用附带的版本
-echo json_encode(IpLocation::getLocation($ip), JSON_UNESCAPED_UNICODE) . "\n";
 
 ```
 
@@ -84,7 +86,7 @@ php tests/ip.php -i 58.196.128.0
 ### 附带的数据库文件更新日期
 2020年9月30日更新
 
-### 在线直接更新（暂时无效，存在带宽压力限制了）
+### 在线直接更新（已失效）
 
 更新到源码目录
 `php ~/bin/update-ip.php`
@@ -92,9 +94,9 @@ php tests/ip.php -i 58.196.128.0
 更新到指定目录
 `php ~/bin/update-ip.php -d /tmp`
 
-### 【或者】自己手动更新数据库
+### 【建议】自己手动更新数据库
 
-http://www.cz88.net/ip/ 下载数据库程序（Windows 环境），执行完毕后，即可在程序安装目录找到数据库文件 qqwry.dat 覆盖即可。
+http://www.cz88.net/ip/ 下载数据库程序（Windows 环境），执行完毕后，可在对应安装目录获取数据库文件，建议放到服务器指定目录，避免放到源码目录，防止升级覆盖。
 
 ## 赞助喝口水
 这个项目也是多个日夜思考的结果，如果觉得对你有帮助，小手一抖也是感谢的。
@@ -122,6 +124,8 @@ http://www.cz88.net/ip/ 下载数据库程序（Windows 环境），执行完毕
 
 ```
  IP 地理位置查询类
+ 
+  2021-04-10 赵彬言        1，3.x 支持ipv6，无缝衔接2.x
  
  2020-11-07 赵彬言         1，只是更新文档，更新数据库。无它。自动更新暂时无法使用。
  
