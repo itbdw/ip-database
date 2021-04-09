@@ -23,7 +23,7 @@
 
 
 ```
-composer require 'itbdw/ip-database' dev-3.x
+composer require 'itbdw/ip-database' ^3.0
 ```
 
 
