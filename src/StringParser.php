@@ -215,15 +215,8 @@ class StringParser
             $location['country'] = '中国';
         }
 
-//        $location['isp'] = self::getIsp($location['area']);
 
         $result['ip'] = $location['ip'];
-
-//            $result['beginip']   = $location['beginip'];
-//            $result['endip']     = $location['endip'];
-//
-//        $result['org_country']    = $location['org_country'];  //纯真数据库返回的列1
-//        $result['org_area'] = $location['org_area'];
 
         $result['country'] = $location['country'];
         $result['province'] = $location['province'];

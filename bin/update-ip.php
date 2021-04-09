@@ -19,6 +19,8 @@
  * `php ~/bin/update-ip.php -d=/tmp`
  */
 
+die("该功能已无法使用");
+
 date_default_timezone_set("PRC");
 
 function curls_get($url)
