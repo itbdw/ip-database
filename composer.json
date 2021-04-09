@@ -1,7 +1,7 @@
 {
   "name": "itbdw/ip-database",
   "type": "library",
-  "description": "IP位置数据库（解析为国家、省、市、县、运营商）",
+  "description": "IP数据库 IPV4 IPV6（解析为国家、省、市、县、运营商）",
   "keywords": [
     "ip",
     "database",
@@ -9,9 +9,7 @@
     "chinese",
     "china",
     "数据库",
-    "纯真",
-    "位置",
-    "地区"
+    "IP数据库"
   ],
   "license": "MIT",
   "authors": [
@@ -26,7 +24,7 @@
     }
   ],
   "require": {
-    "php": "~5.4|~7.0",
+    "php": "*",
     "ext-mbstring": "*",
     "ext-json": "*",
     "ext-iconv": "*"
