@@ -15,7 +15,7 @@
 //需要 composer install 或者去掉上面注释，并注释这一行
 include dirname(__DIR__) .'/vendor/autoload.php';
 
-$input = getopt("i:", ['ip:']);
+$input = getopt("i:", [], $id);
 
 use itbdw\Ip\IpLocation;
 
