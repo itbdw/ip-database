@@ -79,44 +79,33 @@ echo json_encode(IpLocation::getLocation($ip, $qqwry_filepath), JSON_UNESCAPED_U
 
 ## 本地测试测试
 
-```json
-cd 进入 ip-database 目录
-
-composer install
+```
+cd 进入 ip-database 目录 ,composer install
 
 php tests/ip.php
-{"ip":"172.217.25.14","country":"美国","province":"","city":"","county":"","area":"美国 Google全球边缘网络","isp":"","org":{"ip":"172.217.25.14","country":"美国","area":""}}
-{"ip":"140.205.172.5","country":"中国","province":"上海","city":"","county":"","area":"中国上海 阿里云","isp":"","org":{"ip":"140.205.172.5","country":"上海市","area":"阿里云"}}
-{"ip":"123.125.115.110","country":"中国","province":"北京","city":"","county":"","area":"中国北京 北京百度网讯科技有限公司联通节点(BGP)","isp":"联通","org":{"ip":"123.125"area":"北京百度网讯科技有限公司联通节点(BGP)"}}
-{"ip":"221.196.0.0","country":"中国","province":"天津","city":"河北区","county":"","area":"中国天津河北区 联通","isp":"联通","org":{"ip":"221.196.0.0","country":"天津市河北区","area":"联通"}}
-{"ip":"60.195.153.98","country":"中国","province":"北京","city":"顺义区","county":"","area":"中国北京顺义区 后沙峪金龙网吧","isp":"","org":{"ip":"60.195.153.98","country"金龙网吧"}}
-{"ip":"218.193.183.35","country":"中国","province":"上海","city":"","county":"","area":"中国上海 D27-707","isp":"","org":{"ip":"218.193.183.35","country":"上海交通大学闵行-707"}}
-{"ip":"210.74.2.227","country":"中国","province":"北京","city":"","county":"","area":"中国北京 实验学院机房","isp":"","org":{"ip":"210.74.2.227","country":"北京工业大学","area":"实验学院机房"}}
-{"ip":"162.105.217.0","country":"中国","province":"北京","city":"","county":"","area":"中国北京 4区-4f","isp":"","org":{"ip":"162.105.217.0","country":"北京大学万柳学区","area":"4区-4f"}}
-{"ip":"fe80:0000:0001:0000:0440:44ff:1233:5678","country":"局域网","province":"","city":"","county":"","area":"局域网 本地链路单播地址","isp":"","org":{"ip":"fe80:0000:004ff:1233:5678","country":"局域网","area":"本地链路单播地址"}}
-{"ip":"2409:8900:103f:14f:d7e:cd36:11af:be83","country":"中国","province":"北京","city":"","county":"","area":"中国北京 中国移动CMNET网络","isp":"移动","org":{"ip":"2409:e:cd36:11af:be83","country":"中国北京市","area":"中国移动CMNET网络"}}
 
+{"ip":"172.217.25.14","country":"美国","province":"","city":"","county":"","area":"美国 Google全球边缘网络","isp":""}
+{"ip":"140.205.172.5","country":"中国","province":"上海","city":"","county":"","area":"中国上海 阿里云","isp":""}
+{"ip":"123.125.115.110","country":"中国","province":"北京","city":"","county":"","area":"中国北京 北京百度网讯科技有限公司联通节点(BGP)","isp":"联通"}
+{"ip":"221.196.0.0","country":"中国","province":"天津","city":"河北区","county":"","area":"中国天津河北区 联通","isp":"联通"}
+{"ip":"60.195.153.98","country":"中国","province":"北京","city":"顺义区","county":"","area":"中国北京顺义区 后沙峪金龙网吧","isp":""}
+{"ip":"218.193.183.35","country":"中国","province":"上海","city":"","county":"","area":"中国上海 D27-707","isp":""}
+{"ip":"210.74.2.227","country":"中国","province":"北京","city":"","county":"","area":"中国北京 实验学院机房","isp":""}
+{"ip":"162.105.217.0","country":"中国","province":"北京","city":"","county":"","area":"中国北京 4区-4f","isp":""}
+{"ip":"fe80:0000:0001:0000:0440:44ff:1233:5678","country":"局域网","province":"","city":"","county":"","area":"局域网 本地链路单播地址","isp":""}
+{"ip":"2409:8900:103f:14f:d7e:cd36:11af:be83","country":"中国","province":"北京","city":"","county":"","area":"中国北京 中国移动CMNET网络","isp":"移动"}
 
 php tests/ip.php -i 58.196.128.0
-{"ip":"58.196.128.0","country":"中国","province":"上海","city":"","county":"","area":"中国上海 上海交通大学","isp":"","org":{"ip":"58.196.128.0","country":"上海市","area":"上海交通大学"}}
-
+{"ip":"58.196.128.0","country":"中国","province":"上海","city":"","county":"","area":"中国上海 上海交通大学","isp":""}
 
 php tests/ip.php -i 2409:8a00:6c1d:81c0:51b4:d603:57d1:b5ec
-{"ip":"2409:8a00:6c1d:81c0:51b4:d603:57d1:b5ec","country":"中国","province":"北京","city":"","county":"","area":"中国北京 中国移动公众宽带","isp":"移动","org":{"ip":"2409b4:d603:57d1:b5ec","country":"中国北京市","area":"中国移动公众宽带"}}
-
+{"ip":"2409:8a00:6c1d:81c0:51b4:d603:57d1:b5ec","country":"中国","province":"北京","city":"","county":"","area":"中国北京 中国移动公众宽带","isp":"移动"}
 
 ```
 
+### 自己手动更新数据库
 
-### 在线直接更新（已失效）
-
-更新到源码目录
-`php ~/bin/update-ip.php`
-
-更新到指定目录
-`php ~/bin/update-ip.php -d /tmp`
-
-### 【建议】自己手动更新数据库
+由于自动更新已失效，请手动更新
 
 http://www.cz88.net/ip/ 下载数据库程序（Windows 环境），执行完毕后，可在对应安装目录获取数据库文件，建议放到服务器指定目录，避免放到源码目录，防止升级覆盖。
 

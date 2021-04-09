@@ -81,14 +81,15 @@ class StringParser
 
     /**
      * $location = [
-     *  'country', 'area'
-     * 'ip', 'beginip', 'endip'
+     *  'country', 'area', 'ip'
      * ];
      *
+     *
      * @param $location
-     * @return mixed
+     * @param bool $withOriginal debug 用，是否返回原始数据
+     * @return array
      */
-    public static function parse($location)
+    public static function parse($location, $withOriginal = false)
     {
         $org = $location;
         $result = [];
@@ -227,7 +228,9 @@ class StringParser
 
         $result['isp'] = self::getIsp($result['area']);
 
-        $result['org'] = $org;
+        if ($withOriginal) {
+            $result['org'] = $org;
+        }
 
         return $result;
     }
