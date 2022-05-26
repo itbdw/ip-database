@@ -19,7 +19,6 @@
  * `php ~/bin/update-ip.php -d=/tmp`
  */
 
-die("该功能已无法使用");
 
 date_default_timezone_set("PRC");
 
@@ -48,7 +47,7 @@ function curls_get($url)
 }
 
 //可设置为服务器特定目录，单独，避免组件升级互相影响
-$dir = dirname(__DIR__) . "/src";
+$dir = dirname(__DIR__) . "/src/libs";
 $option = getopt("d::");
 if (isset($option['d'])) {
     if (!is_readable($option['d'])) {
