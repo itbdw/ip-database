@@ -104,6 +104,12 @@ class StringParser
             return $result;
         }
 
+        //ipv6 会包含中国 故意去掉
+
+        if (strpos($location['country'], "中国") === 0) {
+            $location['country'] = str_replace("中国", "", $location['country']);
+        }
+
         $location['org_country'] = $location['country']; //北京市朝阳区
 
         $location['org_area'] = $location['area']; // 金桥国际小区
