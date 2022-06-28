@@ -5,11 +5,11 @@
  */
 
 //you do not need to do this if use composer!
-//require dirname(__DIR__) . '/src/ipparser/IpParserInterface.php';
+//require dirname(__DIR__) . '/src/IpParser/IpParserInterface.php';
 //
 //require dirname(__DIR__) . '/src/IpLocation.php';
-//require dirname(__DIR__) . '/src/ipparser/QQwry.php';
-//require dirname(__DIR__) . '/src/ipparser/IpV6wry.php';
+//require dirname(__DIR__) . '/src/IpParser/QQwry.php';
+//require dirname(__DIR__) . '/src/IpParser/IpV6wry.php';
 //require dirname(__DIR__) . '/src/StringParser.php';
 
 //需要 composer install 或者去掉上面注释，并注释这一行
