@@ -98,9 +98,6 @@ php tests/ip.php -i 58.196.128.0
 这个项目也是多个日夜思考的结果，如果觉得对你有帮助，小手一抖也是感谢的。
 <div>
   <div style="float:left;border:solid 1px 000;margin:2px;">
-    <img src="https://wx1.sinaimg.cn/mw690/6b94a2e5ly1gl0wztyez2j20p00ygq78.jpg"  width="200" height="260" >
-  </div>
-  <div style="float:left;border:solid 1px 000;margin:2px;">
     <img src="https://wx1.sinaimg.cn/mw690/6b94a2e5ly1gl0wztevpxj20yi1aujwb.jpg"  width="200" height="260" >
   </div>
 </div>
