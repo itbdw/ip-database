@@ -81,18 +81,9 @@ php tests/ip.php -i 58.196.128.0
 {"ip":"60.195.153.98","country":"中国","province":"北京","city":"顺义区","county":"","isp":"","area":"中国北京顺义区后沙峪金龙网吧"}
 ```
 
-## 更新数据库
+## 更新数据库（不可用）
 
-### 附带的数据库文件更新日期
-2022年5月27日更新
 
-### 在线直接更新
-
-更新到源码目录
-`php ~/bin/update-ip.php`
-
-更新到指定目录
-`php ~/bin/update-ip.php -d /tmp`
 
 ## 赞助喝口水
 这个项目也是多个日夜思考的结果，如果觉得对你有帮助，小手一抖也是感谢的。
@@ -112,30 +103,32 @@ php tests/ip.php -i 58.196.128.0
 ```
  IP 地理位置查询类
  
- 2021-04-10 赵彬言        1，3.x 支持ipv6，无缝衔接2.x
+ 2023-11-23         升级 数据库版本 20231122
  
- 2020-11-07 赵彬言         1，只是更新文档，更新数据库。无它。自动更新暂时无法使用。
+ 2021-04-10         1，3.x 支持ipv6，无缝衔接2.x
  
- 2019-07-25 赵彬言         1，增加自动更新功能，参考 https://blog.shuax.com/archives/QQWryUpdate.html 感谢 https://github.com/itbdw/ip-database/issues/10
+ 2020-11-07          1，只是更新文档，更新数据库。无它。自动更新暂时无法使用。
  
- 2017-09-12 赵彬言         1，缩减返回数据，去掉字段 remark smallarea beginip endip
+ 2019-07-25          1，增加自动更新功能，参考 https://blog.shuax.com/archives/QQWryUpdate.html 感谢 https://github.com/itbdw/ip-database/issues/10
+ 
+ 2017-09-12          1，缩减返回数据，去掉字段 remark smallarea beginip endip
                           2，将调用改为单例模式，保证只读取一次文件
                           3，修复 bug，直接将返回 gbk 编码内容转为 utf-8，移除编码隐患
                           4，去掉了"省"标志，变成了如 中国 浙江 杭州市 这样的数据
 
- 2017-09-04 赵彬言         1，更新 composer 相对路径,bug fix
+ 2017-09-04          1，更新 composer 相对路径,bug fix
 
- 2015-06-11 赵彬言         1，支持composer 方式引用
+ 2015-06-11          1，支持composer 方式引用
                           2，更新 is_valid_ip 实现
 
- 2013-11-10 赵彬言         1，优化，新增支持到市区，县城
+ 2013-11-10          1，优化，新增支持到市区，县城
                           2，返回结构增加 smallarea，具体请看注释
 
- 2012-10-21 赵彬言         1，增加市，县显示
+ 2012-10-21          1，增加市，县显示
                           2，去掉不靠谱的自动转码
                              先统一改为 GBK，最后再做转换解决编码问题
 
- 2012-08-15 赵彬言         1，更新为 PHP5 的规范
+ 2012-08-15          1，更新为 PHP5 的规范
                           2，增加 wphp_ip2long 方法
                           3，增加 get_province 方法
                           4，增加 get_isp 方法
