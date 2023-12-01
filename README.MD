@@ -95,8 +95,9 @@ php tests/ip.php -i 2409:8a00:6c1d:81c0:51b4:d603:57d1:b5ec
 ```
 
 ## 提高下载速度
-建议使用 https://mirrors.cloud.tencent.com/help/composer.html
-#42 
+建议腾讯云加速 https://mirrors.cloud.tencent.com/help/composer.html
+
+原因 https://github.com/itbdw/ip-database/issues/42
 
 ## 赞助喝口水
 这个项目也是多个日夜思考的结果，如果觉得对你有帮助，小手一抖也是感谢的。
