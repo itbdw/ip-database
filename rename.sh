@@ -6,8 +6,8 @@
 # export GIT_COMMITTER_EMAIL="$CORRECT_EMAIL"
 # export GIT_AUTHOR_EMAIL="$CORRECT_EMAIL"
 git filter-branch --env-filter '
-OLD_NAME="IT不倒翁 (Zhao Binyan)"
-OLD_EMAIL="zhao.binyan@immomo.com"
+OLD_NAME="x"
+OLD_EMAIL="x@email.com"
 CORRECT_NAME="itbdw"
 CORRECT_EMAIL="itbudaoweng@gmail.com"
 
