@@ -104,8 +104,8 @@ php tests/ip.php -i 2409:8a00:6c1d:81c0:51b4:d603:57d1:b5ec
 </div>
 
 ## 感谢
-1，纯真IP库
-
+1，纯真IP库（需要安装 EXE ，解压获得离线包）
 https://www.cz88.net/help?id=free
 
-
+2，IPV6（目前已经不再提供离线下载包）
+https://ip.zxinc.org/ipquery/

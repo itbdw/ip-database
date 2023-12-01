@@ -6,6 +6,8 @@
  * Time: 下午2:24
  */
 
+die("Not Available.");
+
 /*
 		纯真数据库自动更新原理实现
 		www.shuax.com 2014.03.27
